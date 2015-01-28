@@ -1,0 +1,31 @@
+<div layout="row" layout-sm="column">
+	<div flex>
+		I'm above on mobile, and to the left on larger devices.
+	</div>
+	<div flex>
+		<md-tabs>
+		<md-tab ng-repeat="routeType in routes" label="{{routeType.key | parseTitles}}">
+		<div layout="column" layout-fill layout-align="space-around">
+			<md-content style="height: 600px;">
+				<section ng-repeat="team in routeType.values">
+					<md-subheader class="md-primary">
+						team ID: {{team.key}}
+					</md-subheader>
+					<md-list layout="column">
+						<md-item ng-repeat="route in team.values">
+							<md-item-content>
+								<div class="md-tile-content">
+									<p>
+									route {{$index}}
+									</p>
+								</div>
+							</md-item-content>
+						</md-item>
+					</md-list>
+				</section>
+			</md-content>
+		</div>
+		</md-tab>
+		</md-tabs>
+	</div>
+</div>

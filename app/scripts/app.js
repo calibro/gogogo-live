@@ -21,8 +21,13 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        templateUrl: 'views/home.html',
+        controller: 'HomeCtrl',
+        resolve: {
+          routes : function (fileService) {
+            return fileService.getFile('data/routes.json');
+          }
+        }
       })
       .when('/about', {
         templateUrl: 'views/about.html',

@@ -23,7 +23,6 @@ angular.module('gogogoApp')
       update: function (id) {
         timer = $interval(function(){
                   api.getRoutes(id);
-                  //console.log('ciao');
                 },10000);
       },
       stop: function(){
