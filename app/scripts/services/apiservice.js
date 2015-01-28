@@ -8,7 +8,7 @@
  * Factory in the gogogoApp.
  */
 angular.module('gogogoApp')
-  .factory('api', function ($http, $q) {
+  .factory('apiService', function ($http, $q) {
 
     var BASE_API_URL = 'http://188.226.184.134';
 

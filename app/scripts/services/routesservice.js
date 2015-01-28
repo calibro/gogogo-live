@@ -8,7 +8,7 @@
  * Factory in the gogogoApp.
  */
 angular.module('gogogoApp')
-  .factory('routesData', function ($interval, api) {
+  .factory('routesService', function ($interval, apiService) {
 
     var timer;
     var killtimer = function(){

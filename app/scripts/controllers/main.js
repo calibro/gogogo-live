@@ -8,10 +8,8 @@
  * Controller of the gogogoApp
  */
 angular.module('gogogoApp')
-  .controller('MainCtrl', function ($scope, api, routesData ) {
+  .controller('MainCtrl', function ($scope, apiService, routesService, fileService ) {
 
-    //$scope.routes = routesData.update()
-
-    console.log(api.getRoutes())
+    $scope.routes = fileService.getFile('data/routes.json')
 
   });

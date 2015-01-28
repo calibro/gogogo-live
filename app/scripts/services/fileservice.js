@@ -8,7 +8,7 @@
  * Factory in the gogogoApp.
  */
 angular.module('gogogoApp')
-  .factory('fileService', function () {
+  .factory('fileService', function ($http, $q) {
 
   return {
 
