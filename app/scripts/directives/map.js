@@ -7,7 +7,7 @@
  * # map
  */
 angular.module('gogogoApp')
-  .directive('map', ['$timeout', '$window',function ($timeout, $window){
+  .directive('map', ['$timeout', '$window','stats', function ($timeout, $window, stats){
     return {
       restrict: 'A',
       replace: false,
@@ -37,7 +37,8 @@ angular.module('gogogoApp')
       		path = d3.geo.path().projection(transform);
 		
 		var data = scope.routes.filter(function(d){return d.key == "walking"}),
-			features = [],
+			featuresPoint = [],
+			featuresLine = [],
 			radius = 5;
 
 		data[0].values.forEach(function(d){
@@ -48,15 +49,30 @@ angular.module('gogogoApp')
       			lon = parseFloat(lastRoute.route[lastRoute.route.length -1].coordinates.longitude),
       			timestamp = lastRoute.route[lastRoute.route.length -1].timestamp
 
+			var line = [];
 
-			var feature = turf.point([lon, lat], {team:teamId, timestamp: timestamp})
+			lastRoute.route.forEach(function(e){
+				var lat = parseFloat(e.coordinates.latitude),
+					lon = parseFloat(e.coordinates.longitude);
+				line.push([lon, lat])
+			})
+				
+			
+			line = stats.turfLine(line, {team:teamId})
 
-			features.push(feature)
+
+			var point = turf.point([lon, lat], {team:teamId, timestamp: timestamp})
+
+			featuresPoint.push(point)
+			featuresLine.push(line)
 
 		})
 
-		var mapData = turf.featurecollection(features);
 
+		var mapData = turf.featurecollection(featuresPoint),
+			mapDataLine = turf.featurecollection(featuresLine);
+
+			console.log(mapDataLine)
 
         var team = g.selectAll(".teams").data(mapData.features, function(d){return d.properties.team})
           
@@ -66,6 +82,17 @@ angular.module('gogogoApp')
           .attr("fill", "#FFE100")
           .attr("fill-opacity", 0.9)
           .attr("stroke", "black")
+
+        var line = g.selectAll(".line").data(mapDataLine.features, function(d){return d.properties.team})
+          
+         line.enter()
+          .append("path")
+          .attr("class", "line")
+          .attr("fill", "none")
+          .attr("stroke", "#FFE100")
+          .attr("stroke-width", "3px")
+          .attr("stroke-opacity", 0.7)
+
 
 
 
@@ -87,6 +114,7 @@ angular.module('gogogoApp')
 		    g.attr("transform", "translate(" + (-topLeft[0] + radius) + "," + (-topLeft[1] + radius) + ")");
 		    
 		    team.attr("d", path);
+		    line.attr("d", path);
 		  }
 		  // Use Leaflet to implement a D3 geometric transformation.
 		  function projectPoint(x, y) {

@@ -6,19 +6,41 @@
 		<md-tabs>
 		<md-tab ng-repeat="routeType in routes" label="{{routeType.key | parseTitles}}">
 		<div layout="column" layout-fill layout-align="space-around">
+  <md-toolbar md-scroll-shrink>
+    <div class="md-toolbar-tools">
+				<div layout layout-sm="column">
+        <md-input-container flex>
+          <label>Team ID</label>
+          <input ng-model="search.key">
+        </md-input-container>
+        <md-input-container flex>
+          <label>Top Team limit</label>
+          <input ng-model="lastNofTeams">
+        </md-input-container>
+        <md-input-container flex>
+          <label>Routes per team</label>
+          <input ng-model="lastNofRoutes">
+        </md-input-container>
+      </div>
+    </div>
+  </md-toolbar>
+
 			<md-content ng-style="{height: windowHeight}">
-				<section ng-repeat="team in routeType.values | orderBy:'values.length':true">
+				<section ng-repeat="team in routeType.values | orderBy:'values.length':true | filter:search | limitTo: lastNofTeams">
 					<md-subheader class="md-primary">
 						team {{team.key}} || routes {{team.values.length}}
 					</md-subheader>
 					<md-list layout="column">
-						<md-item ng-repeat="route in team.values | limitTo: 10">
+						<md-item ng-repeat="route in team.values | limitTo: lastNofRoutes">
 							<md-item-content>
-									<div minimap data="{{route.route}}"></div>
+								<div class="md-tile-left">
+								<div minimap data="{{route.route}}"></div>
+								</div>
 								<div class="md-tile-content">
 									<p>
-									route {{$index}}, kilometers {{route.kilometers}}, seconds {{route.time.seconds}}
+									route #{{$index+1}}
 									</p>
+									<h2>{{route.kilometers | pathlenght}} in <span ng-if="route.time.minutes >= 1">{{route.time.minutes}}min and </span>{{route.time.seconds}}sec</h2>
 								</div>
 							</md-item-content>
 						</md-item>

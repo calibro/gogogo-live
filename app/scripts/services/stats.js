@@ -15,13 +15,13 @@ angular.module('gogogoApp')
         var length = turf.lineDistance(line, units);
         return length;
       },
-      turfLine: function(points){
-        var line = turf.linestring(points);
+      turfLine: function(points, prop){
+        var line = turf.linestring(points, prop);
         return line
       },
       minSec: function(diff){
-        var seconds = diff/1000;
-        var minutes = seconds/60;
+        var minutes = ~~((diff/1000) / 60);
+        var seconds = parseInt((diff/1000) % 60);
         return {seconds: seconds, minutes: minutes}
       }
     };

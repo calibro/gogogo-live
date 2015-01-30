@@ -12,9 +12,11 @@ angular.module('gogogoApp')
 
     //$scope.routes = routesFilter(routes);
     $scope.routes = routes
-    $scope.windowHeight = ($window.innerHeight - 48) + 'px';
+    $scope.windowHeight = ($window.innerHeight - 48 - 64) + 'px';
 
-
+    $scope.lastNofRoutes = 10;
+    $scope.lastNofTeams = 10;
+    $scope.search = {};
 
 
     console.log($scope.routes);
