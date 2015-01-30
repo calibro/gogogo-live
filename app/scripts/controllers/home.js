@@ -8,11 +8,16 @@
  * Controller of the gogogoApp
  */
 angular.module('gogogoApp')
-  .controller('HomeCtrl', function ($scope, routes, apiService, routesService, fileService, routesFilter ) {
+  .controller('HomeCtrl', function ($scope, $window, routes, routesFilter ) {
 
-    $scope.routes = routesFilter(routes)
+    //$scope.routes = routesFilter(routes);
+    $scope.routes = routes
+    $scope.windowHeight = ($window.innerHeight - 48) + 'px';
 
-    console.log($scope.routes)
+
+
+
+    console.log($scope.routes);
     //add update 30 sec
 
   });

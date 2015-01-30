@@ -1,22 +1,23 @@
 <div layout="row" layout-sm="column">
 	<div flex>
-		I'm above on mobile, and to the left on larger devices.
+		<div map></div>
 	</div>
 	<div flex>
 		<md-tabs>
 		<md-tab ng-repeat="routeType in routes" label="{{routeType.key | parseTitles}}">
 		<div layout="column" layout-fill layout-align="space-around">
-			<md-content style="height: 600px;">
-				<section ng-repeat="team in routeType.values">
+			<md-content ng-style="{height: windowHeight}">
+				<section ng-repeat="team in routeType.values | orderBy:'values.length':true">
 					<md-subheader class="md-primary">
-						team ID: {{team.key}}
+						team {{team.key}} || routes {{team.values.length}}
 					</md-subheader>
 					<md-list layout="column">
-						<md-item ng-repeat="route in team.values">
+						<md-item ng-repeat="route in team.values | limitTo: 10">
 							<md-item-content>
+									<div minimap data="{{route.route}}"></div>
 								<div class="md-tile-content">
 									<p>
-									route {{$index}}
+									route {{$index}}, kilometers {{route.kilometers}}, seconds {{route.time.seconds}}
 									</p>
 								</div>
 							</md-item-content>

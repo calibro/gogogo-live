@@ -24,8 +24,9 @@ angular
         templateUrl: 'views/home.html',
         controller: 'HomeCtrl',
         resolve: {
-          routes : function (fileService) {
-            return fileService.getFile('data/routes.json');
+          routes : function (fileService, apiService) {
+            //return fileService.getFile('data/routes.json');
+            return apiService.getRoutes()
           }
         }
       })
