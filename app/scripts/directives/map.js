@@ -75,54 +75,86 @@ angular.module('gogogoApp')
 			mapDataLine = turf.featurecollection(featuresLine);
 
 
-        var team = g.selectAll(".teams").data(mapData.features, function(d){return d.properties.team})
+        var linePath = g.selectAll(".line").data(mapDataLine.features)
           
-         team.enter()
-          .append("path")
-          .attr("class", "teams")
-          .attr("fill", "#FFE100")
-          .attr("fill-opacity", 0.9)
-          .attr("stroke", "black")
-
-        var line = g.selectAll(".line").data(mapDataLine.features, function(d){return d.properties.team})
-          
-         line.enter()
+         linePath.enter()
           .append("path")
           .attr("class", "line")
           .attr("fill", "none")
-          .attr("stroke", "#FFE100")
+          .attr("stroke", "#FF0000")
           .attr("stroke-width", "3px")
-          .attr("stroke-opacity", 0.7)
+          .attr("stroke-opacity", 0.6)
+
+        var team = g.selectAll(".teams").data(mapData.features)
+          
+         team.enter()
+          .append("path")
+          .attr("class", function(d,i){return "team t_"+i;})
+          .attr("fill", "#FF0000")
+          .attr("fill-opacity", 0.9)
+          .attr("stroke", "#FFFFFF")
 
 
 
 
   		mapTeam.on("viewreset", reset);
-  		reset();
+  		reset(true);
 
 	      // Reposition the SVG to cover the features.
-		  function reset() {
+		  function reset(first) {
 		  	
 		  	path.pointRadius(radius);
 
-		    var bounds = path.bounds(mapData),
+		    var bounds = path.bounds(mapDataLine),
 		        topLeft = bounds[0],
 		        bottomRight = bounds[1];
 		    svg .attr("width", bottomRight[0] - topLeft[0] + (radius*2))
 		        .attr("height", bottomRight[1] - topLeft[1] + (radius*2))
-		        .style("left", topLeft[0] + "px")
-		        .style("top", topLeft[1] + "px");
+		        .style("left", (topLeft[0]-radius) + "px")
+		        .style("top", (topLeft[1]-radius) + "px");
 
 		    g.attr("transform", "translate(" + (-topLeft[0] + radius) + "," + (-topLeft[1] + radius) + ")");
 		    
+		    if(first === true){
+		    	linePath.attr("d", path).call(transition)
 		    	team.attr("d", path);
-		    	line.attr("d", path);
+		    }else{
+		    	linePath.attr("d", path).attr("stroke-dasharray", "0,0")
+		    	team.attr("d", path).attr("transform", null)
+		    }
 		  }
 
 		  function projectPoint(x, y) {
 		    var point = mapTeam.latLngToLayerPoint(new L.LatLng(y, x));
 		    this.stream.point(point.x, point.y);
 		  }
+
+        function transition(pathT) {
+            pathT.transition()
+                .duration(2000)
+                .attrTween("stroke-dasharray", tweenDash)
+        } //end transition
+
+        function tweenDash(d,i) {
+
+			  var l = this.getTotalLength(),
+			      it = d3.interpolateString("0," + l, l + "," + l),
+			      _this = this;
+
+			  var point = d3.select(".t_"+i);
+			
+			  var originalPosition = point.attr('d').split('m')[0].replace("M","").split(",");
+				
+			  var origignalX= +originalPosition[0],
+				origignalY= +originalPosition[1]
+
+			  return function(t) { 
+			   	var p = _this.getPointAtLength(t * l);
+				point.attr("transform", "translate(" + (p.x - origignalX)+ "," + (p.y - origignalY) + ")");//move marker
+
+			  	return it(t); 
+			  };
+        } //end tweenDash
 
 		var allLast = function(data){
 
@@ -208,74 +240,40 @@ angular.module('gogogoApp')
 				mapData = allTeam(data, scope.selectedTeam).points;
 				mapDataLine = allTeam(data, scope.selectedTeam).lines;
 
-				console.log(mapData, mapDataLine)
 			}else{
 				mapData = allLast(data).points;
 				mapDataLine = allLast(data).lines;
 			}
 
+	        team.remove();
+	        linePath.remove()
 
-	        team = g.selectAll(".teams").data(mapData.features, function(d, i){
-			        	
-			        	if(!scope.selectedTeam){
-			        		return d.properties.team
-			        	}else{
-			        		return i
-			        	}
-			        })
-	          
-	         team
-	         	.transition()
-	         	.duration(duration)
-	         	.attr("d", path)
+	        if(!mapDataLine.features.length){
+	        	return
+	        }
 
-	         team.enter()
-	          .append("path")
-	          .attr("class", "teams")
-	          .attr("fill", "#FFE100")
-	          .attr("fill-opacity", 0.9)
-	          .attr("stroke", "black")
-	          .attr("stroke-opacity", 0.9)
+	        linePath = g.selectAll(".line").data(mapDataLine.features)
 
-	         team
-	         	.exit()
-	         	.transition()
-	         	.duration(duration)
-	         	.attr("fill-opacity", 0)
-	         	.attr("stroke-opacity", 0)
-	         	.remove()
-
-	        line = g.selectAll(".line").data(mapDataLine.features, function(d, i){
-		        	
-		        	if(!scope.selectedTeam){
-		        	return d.properties.team
-		        	}else{
-		        		return i
-		        	}
-		        })
-
-	          
-	        line
-	         	.transition()
-	         	.duration(duration)
-	         	.attr("d", path)
-
-	         line.enter()
+	         linePath.enter()
 	          .append("path")
 	          .attr("class", "line")
 	          .attr("fill", "none")
-	          .attr("stroke", "#FFE100")
+	          .attr("stroke", "#FF0000")
 	          .attr("stroke-width", "3px")
-	          .attr("stroke-opacity", 0.7)
+	          .attr("stroke-opacity", 0.6)
 
-	        line
-	         	.exit()
-	         	.transition()
-	         	.duration(duration)
-	         	.attr("stroke-opacity", 0)
-	         	.remove()
+	       	team = g.selectAll(".teams").data(mapData.features)
 
-	        reset();
+	         team.enter()
+	          .append("path")
+          	  .attr("class", function(d,i){return "team t_"+i;})
+	          .attr("fill", "#FF0000")
+	          .attr("fill-opacity", 0.9)
+	          .attr("stroke", "#FFFFFF")
+	          .attr("stroke-opacity", 0.9)
+
+
+	        reset(true);
 
 		 }
 
@@ -289,7 +287,6 @@ angular.module('gogogoApp')
 		scope.$watch('selectedIndex', function(newValue, oldValue){
           if(newValue != oldValue){
               scope.selectedTab = scope.routes[newValue].key;
-              scope.selectedTeam = undefined;
               upadate()
           }
         }, true)
