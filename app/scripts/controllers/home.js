@@ -11,7 +11,7 @@ angular.module('gogogoApp')
   .controller('HomeCtrl', function ($scope, $window, routes, routesFilter, routesService ) {
 
     $scope.routes = routes
-    $scope.windowHeight = ($window.innerHeight - 48 - 74) + 'px';
+    $scope.windowHeight = ($window.innerHeight - 48 - 79) + 'px';
 
     $scope.lastNofRoutes = 10;
     $scope.lastNofTeams = 10;

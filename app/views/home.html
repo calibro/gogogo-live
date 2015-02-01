@@ -23,36 +23,43 @@
     		</md-toolbar>
 
 			<md-content ng-style="{height: windowHeight}">
-				<section ng-repeat="team in routeType.values | orderBy:'values.length':true | filter:search | limitTo: lastNofTeams">
+				<section class="pushpush" ng-repeat="team in routeType.values | orderBy:'values.length':true | filter:search | limitTo: lastNofTeams">
 					<md-subheader>
-						<div layout="row" layout-align="start center">
-						  <div class="teamNumber">
-								{{team.key}}
+						<div layout="row" layout-align="space-between center">
+						  <div>
+								<span class="teamNumber">{{team.key}}</span> total routes: {{team.values.length}}
 							</div>
-						  <div class="routesNumber">
-								Total routes: {{team.values.length}} <ng-md-icon icon="chevron_right" style="fill:red" size="20"></ng-md-icon>
-								<!-- <div class="go"><md-button class="md-primary" ng-click="teamSubmit(team.key)">view on map</md-button></div> -->
+						  <div class="teamInfo">
+								<md-button class="md-fab md-warn" ng-click="teamSubmit(team.key)" aria-label="view on the map">
+					      GO!
+					        <md-tooltip>
+          					view on the map
+        					</md-tooltip>
+					      </md-button>
 						  </div>
 						</div>
 					</md-subheader>
 					<md-list layout="column">
 						<md-item ng-repeat="route in team.values | limitTo: lastNofRoutes">
-							<md-item-content>
+							<md-item-content class="singleRoute">
 								<div class="md-tile-left">
 								<div minimap data="{{route.route}}"></div>
 								</div>
 								<div class="md-tile-content">
-									<p>
+									<p class="singleRouteNumber">
 									route #{{$index+1}}
 									</p>
-									<h2>{{route.kilometers | pathlenght}} in <span ng-if="route.time.minutes >= 1">{{route.time.minutes}}min and </span>{{route.time.seconds}}sec</h2>
+									<h2><span ng-bind-html="route.kilometers | pathlenght"></span> <span class="conjunction">in</span> <span ng-if="route.time.minutes >= 1">{{route.time.minutes}}<span class="merry">min</span> <span class="conjunction">and</span> </span>{{route.time.seconds}}<span class="merry">sec</span></h2>
+									<p>
+										{{route.route[route.route.length -1].timestamp | parseDate}}
+									</p>
 								</div>
+								<!-- <div class="go-circle"></div> -->
 							</md-item-content>
 						</md-item>
 					</md-list>
 				</section>
 			</md-content>
-<!-- 		</div> -->
 		</md-tab>
 		</md-tabs>
 	</div>
