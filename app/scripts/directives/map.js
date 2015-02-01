@@ -14,7 +14,7 @@ angular.module('gogogoApp')
       link: function (scope, element, attrs) {
 
       	//set height for map container
-	    d3.select(element[0]).attr('style', 'height:' + $window.innerHeight + 'px')
+	    d3.select(element[0]).attr('style', 'height:' + ($window.innerHeight-48) + 'px')
 
 	    var duration = 1000;
 	    
@@ -25,7 +25,7 @@ angular.module('gogogoApp')
 	     	).setView([52.3667, 4.9000], 13);
 
 	    var stamenLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-		  	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
+		  	attribution: '<a href="http://stamen.com">Stamen Design</a> | <a href="http://openstreetmap.org">OpenStreetMap</a>',
 		    attributionControl: false,
 		    infoControl: true,
 		    minZoom:8,
@@ -304,13 +304,25 @@ angular.module('gogogoApp')
 		scope.$watch('selectedIndex', function(newValue, oldValue){
           if(newValue != oldValue){
               scope.selectedTab = scope.routes[newValue].key;
+              scope.totalTeams = scope.routes[newValue].values.length;
+
               upadate()
           }
         }, true)
 
 		scope.$watch('selectedTeam', function(newValue, oldValue){
           if(newValue != oldValue){
-              upadate()
+          	
+          	if(newValue){
+          		var st = scope.routes[scope.selectedIndex].values
+          									.filter(function(d){
+          										return d.key == newValue;
+          									})
+
+          		scope.selectedTeamRoutes = st[0].values.length;
+          		}
+
+            upadate()
           }
         }, true)
 

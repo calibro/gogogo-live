@@ -1,6 +1,21 @@
 <div layout="row" layout-sm="column">
 	<div flex>
+		<div layout="column">
 		<div map></div>
+		<md-whiteframe class="md-whiteframe-z1" layout="row" id="infoBar" layout-align="space-around center">
+    	<div ng-if="!selectedTeam">
+    		<p>The last route for each one of <b>{{totalTeams}}</b> teams is displayed</p>
+    	</div>
+    	<div ng-if="selectedTeam">
+    		<p>
+    			<b>{{selectedTeamRoutes}}</b> routes of the team <b>{{selectedTeam}}</b> are displayed 
+    			<md-button class="md-warn" ng-click="teamClear()">back to all</md-button>
+    		</p>
+
+    	</div>
+    	<!-- <div>loading new data</div> -->
+  	</md-whiteframe>
+		</div>
 	</div>
 	<div flex>
 		<md-tabs md-selected="selectedIndex" id="transportationTab">

@@ -26,14 +26,9 @@ angular
         controller: 'HomeCtrl',
         resolve: {
           routes : function (fileService, apiService) {
-            //return fileService.getFile('data/routes.json');
             return apiService.getRoutes()
           }
         }
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl'
       })
       .otherwise({
         redirectTo: '/'

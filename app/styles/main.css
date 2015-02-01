@@ -102,6 +102,14 @@ md-item-content.singleRoute{
 
 path.line{
 	stroke-linecap: round;
-	
 }
 
+#infoBar{
+	min-height: 48px;
+	font-size: 0.8em;
+
+}
+
+#infoBar p{
+	margin: 0px;
+}
