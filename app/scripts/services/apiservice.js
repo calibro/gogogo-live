@@ -19,6 +19,7 @@ angular.module('gogogoApp')
 
        $http({
           method: 'GET',
+          cache: false,
           url : BASE_API_URL + (teamID ? serviceUrl + '/' + teamID : serviceUrl),
         }).success(function(data){
          deferred.resolve(routesFilter(data));

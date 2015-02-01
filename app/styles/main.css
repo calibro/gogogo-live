@@ -1,0 +1,53 @@
+#routeFilter{
+	background-color: #FFF7BC;
+	font-size: 1.0em;
+	/*border-bottom: 1px dashed rgba(0, 0, 0, 0.12);*/
+}
+
+#routeFilter md-input-container{
+	padding-bottom: 10px;
+	padding: 15px;
+}
+
+#transportationTab .md-header{
+	background-color: rgba(255,255,255,1);
+	border-bottom: 1px solid rgba(0, 0, 0, 1);
+}
+
+#transportationTab md-tabs-ink-bar{
+	color: rgba(0,0,0,1);
+	background-color: rgba(0,0,0,1);;
+}
+
+#transportationTab md-tab.active{
+	color: rgba(0,0,0,1);
+}
+
+#transportationTab md-tab{
+	color: rgba(0,0,0,0.3);
+}
+
+#transportationTab .md-input-focused label{
+	color: rgba(0,0,0,1);
+}
+
+#transportationTab .md-input-focused .md-input{
+	border-color: rgba(0,0,0,1);
+}
+
+.teamNumber, .routesNumber{
+	margin-right: 15px;
+}
+
+.teamNumber {
+	color: rgba(255,0,0,1);
+	font-size: 2.5em;
+}
+
+.teamNumber .tt{
+	color: rgba(0,0,0,0.3);
+	/*vertical-align:super;*/
+	font-size: 0.6em;
+}
+
+

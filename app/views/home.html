@@ -3,32 +3,37 @@
 		<div map></div>
 	</div>
 	<div flex>
-		<md-tabs>
+		<md-tabs md-selected="selectedIndex" id="transportationTab">
 		<md-tab ng-repeat="routeType in routes" label="{{routeType.key | parseTitles}}">
-		<div layout="column" layout-fill layout-align="space-around">
-  <md-toolbar md-scroll-shrink>
-    <div class="md-toolbar-tools">
-				<div layout layout-sm="column">
-        <md-input-container flex>
-          <label>Team ID</label>
-          <input ng-model="search.key">
-        </md-input-container>
-        <md-input-container flex>
-          <label>Top Team limit</label>
+    			<md-toolbar md-scroll-shrink id="routeFilter">
+    			 <div layout="row" layout-sm="column" layout-align="space-around center">
+        <md-input-container>
+          <label>Top Teams</label>
           <input ng-model="lastNofTeams">
         </md-input-container>
-        <md-input-container flex>
+        <md-input-container>
           <label>Routes per team</label>
           <input ng-model="lastNofRoutes">
         </md-input-container>
-      </div>
-    </div>
-  </md-toolbar>
+          <md-input-container>
+          <label>Search team</label>
+          <input ng-model="search.key">
+        </md-input-container>
+        </div>
+    		</md-toolbar>
 
 			<md-content ng-style="{height: windowHeight}">
 				<section ng-repeat="team in routeType.values | orderBy:'values.length':true | filter:search | limitTo: lastNofTeams">
-					<md-subheader class="md-primary">
-						team {{team.key}} || routes {{team.values.length}}
+					<md-subheader>
+						<div layout="row" layout-align="start center">
+						  <div class="teamNumber">
+								{{team.key}}
+							</div>
+						  <div class="routesNumber">
+								Total routes: {{team.values.length}} <ng-md-icon icon="chevron_right" style="fill:red" size="20"></ng-md-icon>
+								<!-- <div class="go"><md-button class="md-primary" ng-click="teamSubmit(team.key)">view on map</md-button></div> -->
+						  </div>
+						</div>
 					</md-subheader>
 					<md-list layout="column">
 						<md-item ng-repeat="route in team.values | limitTo: lastNofRoutes">
@@ -47,7 +52,7 @@
 					</md-list>
 				</section>
 			</md-content>
-		</div>
+<!-- 		</div> -->
 		</md-tab>
 		</md-tabs>
 	</div>

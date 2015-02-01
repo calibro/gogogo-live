@@ -15,6 +15,8 @@ angular.module('gogogoApp')
 
       	//set height for map container
 	    d3.select(element[0]).attr('style', 'height:' + $window.innerHeight + 'px')
+
+	    var duration = 1000;
 	    
 
 	    var mapTeam = L.map(
@@ -36,7 +38,7 @@ angular.module('gogogoApp')
 		var transform = d3.geo.transform({point: projectPoint}),
       		path = d3.geo.path().projection(transform);
 		
-		var data = scope.routes.filter(function(d){return d.key == "walking"}),
+		var data = scope.routes.filter(function(d){return d.key == scope.selectedTab}),
 			featuresPoint = [],
 			featuresLine = [],
 			radius = 5;
@@ -72,7 +74,6 @@ angular.module('gogogoApp')
 		var mapData = turf.featurecollection(featuresPoint),
 			mapDataLine = turf.featurecollection(featuresLine);
 
-			console.log(mapDataLine)
 
         var team = g.selectAll(".teams").data(mapData.features, function(d){return d.properties.team})
           
@@ -101,6 +102,7 @@ angular.module('gogogoApp')
 
 	      // Reposition the SVG to cover the features.
 		  function reset() {
+		  	
 		  	path.pointRadius(radius);
 
 		    var bounds = path.bounds(mapData),
@@ -113,27 +115,188 @@ angular.module('gogogoApp')
 
 		    g.attr("transform", "translate(" + (-topLeft[0] + radius) + "," + (-topLeft[1] + radius) + ")");
 		    
-		    team.attr("d", path);
-		    line.attr("d", path);
+		    	team.attr("d", path);
+		    	line.attr("d", path);
 		  }
-		  // Use Leaflet to implement a D3 geometric transformation.
+
 		  function projectPoint(x, y) {
 		    var point = mapTeam.latLngToLayerPoint(new L.LatLng(y, x));
 		    this.stream.point(point.x, point.y);
 		  }
 
+		var allLast = function(data){
+
+			var featuresPoint = [],
+				featuresLine = [];
+
+			data[0].values.forEach(function(d){
+
+				var lastRoute = d.values[d.values.length -1],
+					teamId = lastRoute.teamid,
+					lat = parseFloat(lastRoute.route[lastRoute.route.length -1].coordinates.latitude),
+	      			lon = parseFloat(lastRoute.route[lastRoute.route.length -1].coordinates.longitude),
+	      			timestamp = lastRoute.route[lastRoute.route.length -1].timestamp
+
+				var line = [];
+
+				lastRoute.route.forEach(function(e){
+					var lat = parseFloat(e.coordinates.latitude),
+						lon = parseFloat(e.coordinates.longitude);
+					line.push([lon, lat])
+				})
+					
+				
+				line = stats.turfLine(line, {team:teamId})
+
+
+				var point = turf.point([lon, lat], {team:teamId, timestamp: timestamp})
+
+				featuresPoint.push(point)
+				featuresLine.push(line)
+
+			})
+
+			return {points: turf.featurecollection(featuresPoint), lines: turf.featurecollection(featuresLine)}
+		}
+
+		var allTeam = function(data, selectedTeam){
+
+			var featuresPoint = [],
+				featuresLine = [];
+
+			var teamData = data[0].values.filter(function(d){return d.key == selectedTeam});
+			if (teamData.length) {
+				teamData[0].values.forEach(function(d){
+
+					var teamId = d.teamid,
+						lat = parseFloat(d.route[d.route.length -1].coordinates.latitude),
+		      			lon = parseFloat(d.route[d.route.length -1].coordinates.longitude),
+		      			timestamp = d.route[d.route.length -1].timestamp
+
+					var line = [];
+
+					d.route.forEach(function(e){
+						var lat = parseFloat(e.coordinates.latitude),
+							lon = parseFloat(e.coordinates.longitude);
+						line.push([lon, lat])
+					})
+						
+					
+					line = stats.turfLine(line, {team:teamId})
+
+
+					var point = turf.point([lon, lat], {team:teamId, timestamp: timestamp})
+
+					featuresPoint.push(point)
+					featuresLine.push(line)
+
+				})
+				
+				return {points: turf.featurecollection(featuresPoint), lines: turf.featurecollection(featuresLine)}
+
+			}else{
+				return {points: turf.featurecollection([]), lines: turf.featurecollection([])}
+			}
+		}
+
 		 var upadate = function(){
 		 	
-			team
-		        .transition()
-		        .duration(duration)
-		        .attr("d", path)
+
+			data = scope.routes.filter(function(d){return d.key == scope.selectedTab});
+
+			if(scope.selectedTeam){
+				mapData = allTeam(data, scope.selectedTeam).points;
+				mapDataLine = allTeam(data, scope.selectedTeam).lines;
+
+				console.log(mapData, mapDataLine)
+			}else{
+				mapData = allLast(data).points;
+				mapDataLine = allLast(data).lines;
+			}
+
+
+	        team = g.selectAll(".teams").data(mapData.features, function(d, i){
+			        	
+			        	if(!scope.selectedTeam){
+			        		return d.properties.team
+			        	}else{
+			        		return i
+			        	}
+			        })
+	          
+	         team
+	         	.transition()
+	         	.duration(duration)
+	         	.attr("d", path)
+
+	         team.enter()
+	          .append("path")
+	          .attr("class", "teams")
+	          .attr("fill", "#FFE100")
+	          .attr("fill-opacity", 0.9)
+	          .attr("stroke", "black")
+	          .attr("stroke-opacity", 0.9)
+
+	         team
+	         	.exit()
+	         	.transition()
+	         	.duration(duration)
+	         	.attr("fill-opacity", 0)
+	         	.attr("stroke-opacity", 0)
+	         	.remove()
+
+	        line = g.selectAll(".line").data(mapDataLine.features, function(d, i){
+		        	
+		        	if(!scope.selectedTeam){
+		        	return d.properties.team
+		        	}else{
+		        		return i
+		        	}
+		        })
+
+	          
+	        line
+	         	.transition()
+	         	.duration(duration)
+	         	.attr("d", path)
+
+	         line.enter()
+	          .append("path")
+	          .attr("class", "line")
+	          .attr("fill", "none")
+	          .attr("stroke", "#FFE100")
+	          .attr("stroke-width", "3px")
+	          .attr("stroke-opacity", 0.7)
+
+	        line
+	         	.exit()
+	         	.transition()
+	         	.duration(duration)
+	         	.attr("stroke-opacity", 0)
+	         	.remove()
+
+	        reset();
+
 		 }
 
 		scope.$watch('routes', function(newValue, oldValue){
           if(newValue != oldValue){
-              console.log("ciao")
+              console.log("ciao, sto cambiando")
               //upadate()
+          }
+        }, true)
+
+		scope.$watch('selectedIndex', function(newValue, oldValue){
+          if(newValue != oldValue){
+              scope.selectedTab = scope.routes[newValue].key;
+              scope.selectedTeam = undefined;
+              upadate()
+          }
+        }, true)
+
+		scope.$watch('selectedTeam', function(newValue, oldValue){
+          if(newValue != oldValue){
+              upadate()
           }
         }, true)
 

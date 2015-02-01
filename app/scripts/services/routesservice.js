@@ -20,10 +20,10 @@ angular.module('gogogoApp')
     };
 
     return {
-      update: function (id) {
+      update: function (interval, id) {
         timer = $interval(function(){
-                  api.getRoutes(id);
-                },10000);
+                  apiService.getRoutes(id);
+                },interval);
       },
       stop: function(){
 
