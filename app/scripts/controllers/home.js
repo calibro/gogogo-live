@@ -8,7 +8,7 @@
  * Controller of the gogogoApp
  */
 angular.module('gogogoApp')
-  .controller('HomeCtrl', function ($scope, $window, $interval, apiService, routes, routesFilter, routesService ) {
+  .controller('HomeCtrl', function ($scope, $window, $interval, $mdToast, $animate, apiService, routes, routesFilter, routesService ) {
 
     $scope.routes = routes
     $scope.windowHeight = ($window.innerHeight - 48 - 79) + 'px';
@@ -43,18 +43,31 @@ angular.module('gogogoApp')
         }
     };
 
-    // timer = $interval(function(){
-    //             apiService.getRoutes().then(
-    //                 function(data){
-    //                     $scope.routes = data;
-    //                 },
-    //                 function(error){
-    //                     $scope.errors = error;
-    //                      killtimer();
-    //                 })
-    //         },150000);
-    
-    console.log($scope.routes);
-    //add update 30 sec
+    timer = $interval(function(){
+                     $scope.showSimpleToast()
+                apiService.getRoutes().then(
+                    function(data){
+                        $scope.routes = data;
+                        $scope.loading = false;
+                        $scope.closeToast()
+                    },
+                    function(error){
+                        $scope.errors = error;
+                        $scope.closeToast()
+                         killtimer();
+                    })
+            },15000);
+
+  $scope.showSimpleToast = function() {
+    $mdToast.show(
+      $mdToast.simple()
+        .content('LOADING NEW DATA...')
+        .position('top right')
+    );
+  };
+
+     $scope.closeToast = function() {
+        $mdToast.hide();
+      };
 
   });
