@@ -23,6 +23,9 @@ angular.module('gogogoApp')
     $scope.errors; 
     $scope.totalTeams = $scope.routes[$scope.selectedIndex].values.length;
     $scope.selectedTeamRoutes;
+    $scope.autoupdate = true;
+
+
 
 
     $scope.teamSubmit = function(team){
@@ -69,5 +72,28 @@ angular.module('gogogoApp')
      $scope.closeToast = function() {
         $mdToast.hide();
       };
+
+    $scope.onAutoupdateChange = function(auState){
+
+        if(auState){
+            timer = $interval(function(){
+                 $scope.showSimpleToast()
+            apiService.getRoutes().then(
+                function(data){
+                    $scope.routes = data;
+                    $scope.loading = false;
+                    $scope.closeToast()
+                },
+                function(error){
+                    $scope.errors = error;
+                    $scope.closeToast()
+                     killtimer();
+                })
+            },15000);
+
+        }else{
+            killtimer();
+        }
+    };
 
   });

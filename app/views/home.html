@@ -2,7 +2,7 @@
 	<div flex>
 		<div layout="column">
 		<div map></div>
-		<md-whiteframe class="md-whiteframe-z1" layout="row" id="infoBar" layout-align="space-around center">
+		<md-whiteframe class="md-whiteframe-z1" layout="row" id="infoBar" layout-align="space-between center">
     	<div ng-if="!selectedTeam">
     		<p>The last route for each one of <b>{{totalTeams}}</b> teams is displayed</p>
     	</div>
@@ -11,9 +11,15 @@
     			<b>{{selectedTeamRoutes}}</b> routes of the team <b>{{selectedTeam}}</b> are displayed 
     			<md-button class="md-warn" ng-click="teamClear()">back to all</md-button>
     		</p>
-
     	</div>
-    	<!-- <div>loading new data</div> -->
+    	<div>
+    		<p>
+
+    			<md-switch ng-model="autoupdate" class="md-warn" ng-change="onAutoupdateChange(autoupdate)">
+    			autoupdate
+  				</md-switch>
+    		</p>
+    	</div>
   	</md-whiteframe>
 		</div>
 	</div>

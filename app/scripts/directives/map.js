@@ -14,7 +14,7 @@ angular.module('gogogoApp')
       link: function (scope, element, attrs) {
 
       	//set height for map container
-	    d3.select(element[0]).attr('style', 'height:' + ($window.innerHeight-48) + 'px')
+	    d3.select(element[0]).attr('style', 'height:' + ($window.innerHeight-60) + 'px')
 
 	    var duration = 1000;
 	    

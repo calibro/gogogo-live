@@ -105,8 +105,9 @@ path.line{
 }
 
 #infoBar{
-	min-height: 48px;
+	min-height: 60px;
 	font-size: 0.8em;
+	padding: 0px 10px;
 
 }
 
