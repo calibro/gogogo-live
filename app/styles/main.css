@@ -100,5 +100,8 @@ md-item-content.singleRoute{
 	background-color: green;
 }
 
-
+path.line{
+	stroke-linecap: round;
+	
+}
 

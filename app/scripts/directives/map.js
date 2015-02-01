@@ -20,15 +20,15 @@ angular.module('gogogoApp')
 	    
 
 	    var mapTeam = L.map(
-	     	element[0],
-	     	{maxBounds: [[52.2829,4.7948],[52.4476,5.0187]]}
+	     	element[0]//,
+	     	//{maxBounds: [[52.2829,4.7948],[52.4476,5.0187]]}
 	     	).setView([52.3667, 4.9000], 13);
 
 	    var stamenLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
 		  	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
 		    attributionControl: false,
 		    infoControl: true,
-		    minZoom:12,
+		    minZoom:8,
 		    maxZoom:17
 		}).addTo(mapTeam);
 
@@ -108,20 +108,38 @@ angular.module('gogogoApp')
 		    var bounds = path.bounds(mapDataLine),
 		        topLeft = bounds[0],
 		        bottomRight = bounds[1];
-		    svg .attr("width", bottomRight[0] - topLeft[0] + (radius*2))
-		        .attr("height", bottomRight[1] - topLeft[1] + (radius*2))
-		        .style("left", (topLeft[0]-radius) + "px")
-		        .style("top", (topLeft[1]-radius) + "px");
 
-		    g.attr("transform", "translate(" + (-topLeft[0] + radius) + "," + (-topLeft[1] + radius) + ")");
-		    
+		    var leafletBounds = d3.geo.bounds(mapDataLine)
+
+
 		    if(first === true){
-		    	linePath.attr("d", path).call(transition)
-		    	team.attr("d", path);
-		    }else{
-		    	linePath.attr("d", path).attr("stroke-dasharray", "0,0")
-		    	team.attr("d", path).attr("transform", null)
-		    }
+			    mapTeam.fitBounds([
+				    [leafletBounds[0][1], leafletBounds[1][0]],
+				    [leafletBounds[1][1], leafletBounds[0][0]]
+				]);
+			}
+
+		    mapTeam.on('moveend', function(){
+
+			    svg .attr("width", bottomRight[0] - topLeft[0] + (radius*2))
+			        .attr("height", bottomRight[1] - topLeft[1] + (radius*2))
+			        .style("left", (topLeft[0]-radius) + "px")
+			        .style("top", (topLeft[1]-radius) + "px");
+
+			    g.attr("transform", "translate(" + (-topLeft[0] + radius) + "," + (-topLeft[1] + radius) + ")");
+
+
+
+			    
+			    if(first === true){
+			    	linePath.attr("d", path).call(transition)
+			    	team.attr("d", path);
+			    	first = false;
+			    }else{
+			    	linePath.attr("d", path).attr("stroke-dasharray", "0,0")
+			    	team.attr("d", path).attr("transform", null)
+			    }
+			})
 		  }
 
 		  function projectPoint(x, y) {
@@ -279,8 +297,7 @@ angular.module('gogogoApp')
 
 		scope.$watch('routes', function(newValue, oldValue){
           if(newValue != oldValue){
-              console.log("ciao, sto cambiando")
-              //upadate()
+              upadate()
           }
         }, true)
 
