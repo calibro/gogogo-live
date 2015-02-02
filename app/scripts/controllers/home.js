@@ -11,18 +11,20 @@ angular.module('gogogoApp')
   .controller('HomeCtrl', function ($scope, $window, $interval, $mdToast, $animate, apiService, routes, routesFilter, routesService ) {
 
     $scope.errors;
+    $scope.methods;
     $scope.autoupdate = true;
 
     if(!routes.length){
         $scope.routes = []
         $scope.routes.push({key:"walking", values:[]})
-        $scope.routes.push({key:"cycling", values:[]})
         $scope.routes.push({key:"bike", values:[]})
         $scope.routes.push({key:"public_transport", values:[]})
+        $scope.methods = ["walking", "bike", "public_transport"]
         $scope.errors = "It seems there is no data...come back later!"
         $scope.autoupdate = false;
     }else{
         $scope.routes = routes
+        $scope.methods = $scope.routes.map(function(d){return d.key})
     }
     
 

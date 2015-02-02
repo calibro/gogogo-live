@@ -28,7 +28,7 @@
 	</div>
 	<div flex>
 		<md-tabs md-selected="selectedIndex" id="transportationTab">
-		<md-tab label="walking">
+		<md-tab ng-if="routes[0]" label="{{methods[0] | parseTitles}}">
     			<md-toolbar md-scroll-shrink id="routeFilter">
     			 <div layout="row" layout-sm="column" layout-align="space-around center">
         <md-input-container>
@@ -84,7 +84,7 @@
 				</section>
 			</md-content>
 		</md-tab>
-		<md-tab label="bike">
+		<md-tab ng-if="routes[1]" label="{{methods[1] | parseTitles}}">
     			<md-toolbar md-scroll-shrink id="routeFilter">
     			 <div layout="row" layout-sm="column" layout-align="space-around center">
         <md-input-container>
@@ -140,7 +140,7 @@
 				</section>
 			</md-content>
 		</md-tab>
-		<md-tab label="public transport">
+		<md-tab ng-if="routes[2]" label="{{methods[2] | parseTitles}}">
     			<md-toolbar md-scroll-shrink id="routeFilter">
     			 <div layout="row" layout-sm="column" layout-align="space-around center">
         <md-input-container>

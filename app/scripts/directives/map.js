@@ -18,7 +18,7 @@ angular.module('gogogoApp')
 
 	    var duration = 1000,
 	    	linePath,
-	    	teams,
+	    	team,
 	    	mapData,
 	    	mapDataLine;
 	    
