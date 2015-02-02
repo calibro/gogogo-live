@@ -64,7 +64,7 @@
 						</div>
 					</md-subheader>
 					<md-list layout="column">
-						<md-item ng-repeat="route in team.values | limitTo: lastNofRoutes">
+						<md-item ng-repeat="route in team.values | orderBy:route.route[route.route.length-1].timestamp:true | limitTo: lastNofRoutes">
 							<md-item-content class="singleRoute">
 								<div class="md-tile-left">
 								<div minimap route="route.route"></div>
