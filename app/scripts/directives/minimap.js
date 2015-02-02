@@ -11,10 +11,13 @@ angular.module('gogogoApp')
     return {
       restrict: 'A',
       replace: false,
+      scope: {
+        route: '='
+      },
       link: function (scope, element, attrs) {
 
-		var route = JSON.parse(attrs.data)
-		var line = []
+    var route = scope.route;
+		var line = [];
 
 		route.forEach(function(d){
 			var lat = parseFloat(d.coordinates.latitude),

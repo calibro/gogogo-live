@@ -67,7 +67,7 @@
 						<md-item ng-repeat="route in team.values | limitTo: lastNofRoutes">
 							<md-item-content class="singleRoute">
 								<div class="md-tile-left">
-								<div minimap data="{{route.route}}"></div>
+								<div minimap route="route.route"></div>
 								</div>
 								<div class="md-tile-content">
 									<p class="singleRouteNumber">
@@ -123,7 +123,7 @@
 						<md-item ng-repeat="route in team.values | limitTo: lastNofRoutes">
 							<md-item-content class="singleRoute">
 								<div class="md-tile-left">
-								<div minimap data="{{route.route}}"></div>
+								<div minimap route="route.route"></div>
 								</div>
 								<div class="md-tile-content">
 									<p class="singleRouteNumber">
@@ -179,7 +179,7 @@
 						<md-item ng-repeat="route in team.values | limitTo: lastNofRoutes">
 							<md-item-content class="singleRoute">
 								<div class="md-tile-left">
-								<div minimap data="{{route.route}}"></div>
+								<div minimap route="route.route"></div>
 								</div>
 								<div class="md-tile-content">
 									<p class="singleRouteNumber">
