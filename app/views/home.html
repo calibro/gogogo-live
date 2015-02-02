@@ -3,7 +3,10 @@
 		<div layout="column">
 		<div map></div>
 		<md-whiteframe class="md-whiteframe-z1" layout="row" id="infoBar" layout-align="space-between center">
-    	<div ng-if="!selectedTeam">
+    	<div ng-if="errors">
+    		<p><b>{{errors}}</b></p>
+    	</div>
+    	<div ng-if="!selectedTeam && !errors">
     		<p>The last route for each one of <b>{{totalTeams}}</b> teams is displayed</p>
     	</div>
     	<div ng-if="selectedTeam">

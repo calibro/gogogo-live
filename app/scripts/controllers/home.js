@@ -10,7 +10,22 @@
 angular.module('gogogoApp')
   .controller('HomeCtrl', function ($scope, $window, $interval, $mdToast, $animate, apiService, routes, routesFilter, routesService ) {
 
-    $scope.routes = routes
+    $scope.errors;
+    $scope.autoupdate = true;
+
+    if(!routes.length){
+        $scope.routes = []
+        $scope.routes.push({key:"walking", values:[]})
+        $scope.routes.push({key:"cycling", values:[]})
+        $scope.routes.push({key:"bike", values:[]})
+        $scope.routes.push({key:"public_transport", values:[]})
+        $scope.errors = "It seems there is no data...come back later!"
+        $scope.autoupdate = false;
+    }else{
+        $scope.routes = routes
+    }
+    
+
     $scope.windowHeight = ($window.innerHeight - 48 - 79) + 'px';
 
     $scope.lastNofRoutes = 10;
@@ -20,10 +35,8 @@ angular.module('gogogoApp')
     $scope.selectedIndex = 0;
     $scope.selectedTab = $scope.routes[$scope.selectedIndex].key;
     $scope.selectedTeam;
-    $scope.errors; 
     $scope.totalTeams = $scope.routes[$scope.selectedIndex].values.length;
     $scope.selectedTeamRoutes;
-    $scope.autoupdate = true;
 
 
 

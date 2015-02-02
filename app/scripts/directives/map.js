@@ -16,7 +16,11 @@ angular.module('gogogoApp')
       	//set height for map container
 	    d3.select(element[0]).attr('style', 'height:' + ($window.innerHeight-60) + 'px')
 
-	    var duration = 1000;
+	    var duration = 1000,
+	    	linePath,
+	    	teams,
+	    	mapData,
+	    	mapDataLine;
 	    
 
 	    var mapTeam = L.map(
@@ -37,6 +41,10 @@ angular.module('gogogoApp')
 
 		var transform = d3.geo.transform({point: projectPoint}),
       		path = d3.geo.path().projection(transform);
+
+      	if(scope.errors){
+      		return;
+      	}
 		
 		var data = scope.routes.filter(function(d){return d.key == scope.selectedTab}),
 			featuresPoint = [],
@@ -71,11 +79,11 @@ angular.module('gogogoApp')
 		})
 
 
-		var mapData = turf.featurecollection(featuresPoint),
-			mapDataLine = turf.featurecollection(featuresLine);
+		mapData = turf.featurecollection(featuresPoint);
+		mapDataLine = turf.featurecollection(featuresLine);
 
 
-        var linePath = g.selectAll(".line").data(mapDataLine.features)
+        linePath = g.selectAll(".line").data(mapDataLine.features)
           
          linePath.enter()
           .append("path")
@@ -85,7 +93,7 @@ angular.module('gogogoApp')
           .attr("stroke-width", "3px")
           .attr("stroke-opacity", 0.6)
 
-        var team = g.selectAll(".teams").data(mapData.features)
+        team = g.selectAll(".teams").data(mapData.features)
           
          team.enter()
           .append("path")
