@@ -314,6 +314,8 @@ angular.module('gogogoApp')
           if(newValue != oldValue){
           	
           	if(newValue){
+          		
+
           		var st = scope.routes[scope.selectedIndex].values
           									.filter(function(d){
           										return d.key == newValue;
