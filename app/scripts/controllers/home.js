@@ -14,7 +14,7 @@ angular.module('gogogoApp')
     $scope.methods;
     $scope.autoupdate = true;
 
-    if(!routes.length){
+    if(!routes.nested.length){
         $scope.routes = []
         $scope.routes.push({key:"walking", values:[]})
         $scope.routes.push({key:"bike", values:[]})
@@ -23,8 +23,9 @@ angular.module('gogogoApp')
         $scope.errors = "It seems there is no data...come back later!"
         $scope.autoupdate = false;
     }else{
-        $scope.routes = routes
+        $scope.routes = routes.nested;
         $scope.methods = $scope.routes.map(function(d){return d.key})
+        $scope.dataLength = routes.entries;
     }
     
 
@@ -66,7 +67,8 @@ angular.module('gogogoApp')
                      $scope.showSimpleToast()
                 apiService.getRoutes().then(
                     function(data){
-                        $scope.routes = data;
+                        $scope.routes = data.nested;
+                        $scope.dataLength = data.entries;
                         $scope.loading = false;
                         $scope.closeToast()
                     },
@@ -97,7 +99,8 @@ angular.module('gogogoApp')
                  $scope.showSimpleToast()
             apiService.getRoutes().then(
                 function(data){
-                    $scope.routes = data;
+                    $scope.routes = data.nested;
+                    $scope.dataLength = data.entries;
                     $scope.loading = false;
                     $scope.closeToast()
                 },

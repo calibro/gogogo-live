@@ -11,6 +11,9 @@
 angular.module('gogogoApp')
   .filter('routes', function (stats) {
     return function (input) {
+
+      var dataLength = input.length;
+
       var data = d3.nest()
       				.key(function(d){return d.transport_method})
       				.key(function(d){return d.teamid})
@@ -38,6 +41,6 @@ angular.module('gogogoApp')
       					})
       				.entries(input)
 
-      return data;
+      return {nested: data, entries: dataLength};
     };
   });

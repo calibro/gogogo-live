@@ -303,7 +303,7 @@ angular.module('gogogoApp')
 
 		 }
 
-		scope.$watch('routes', function(newValue, oldValue){
+		scope.$watch('dataLength', function(newValue, oldValue){
           if(newValue != oldValue){
               upadate()
           }
