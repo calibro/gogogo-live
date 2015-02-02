@@ -84,7 +84,7 @@
 				</section>
 			</md-content>
 		</md-tab>
-		<md-tab label="cycling">
+		<md-tab label="bike">
     			<md-toolbar md-scroll-shrink id="routeFilter">
     			 <div layout="row" layout-sm="column" layout-align="space-around center">
         <md-input-container>
@@ -140,62 +140,6 @@
 				</section>
 			</md-content>
 		</md-tab>
-		<md-tab label="bike">
-    			<md-toolbar md-scroll-shrink id="routeFilter">
-    			 <div layout="row" layout-sm="column" layout-align="space-around center">
-        <md-input-container>
-          <label>Top Teams</label>
-          <input ng-model="lastNofTeams">
-        </md-input-container>
-        <md-input-container>
-          <label>Routes per team</label>
-          <input ng-model="lastNofRoutes">
-        </md-input-container>
-          <md-input-container>
-          <label>Search team</label>
-          <input ng-model="search.key">
-        </md-input-container>
-        </div>
-    		</md-toolbar>
-
-			<md-content ng-style="{height: windowHeight}">
-				<section class="pushpush" ng-repeat="team in routes[2].values | orderBy:'values.length':true | filter:search | limitTo: lastNofTeams">
-					<md-subheader>
-						<div layout="row" layout-align="space-between center">
-						  <div>
-								<span class="teamNumber">{{team.key}}</span> total routes: {{team.values.length}}
-							</div>
-						  <div class="teamInfo">
-								<md-button class="md-fab md-warn" ng-click="teamSubmit(team.key)" aria-label="view on the map">
-					      GO!
-					        <md-tooltip>
-          					view on the map
-        					</md-tooltip>
-					      </md-button>
-						  </div>
-						</div>
-					</md-subheader>
-					<md-list layout="column">
-						<md-item ng-repeat="route in team.values | limitTo: lastNofRoutes">
-							<md-item-content class="singleRoute">
-								<div class="md-tile-left">
-								<div minimap data="{{route.route}}"></div>
-								</div>
-								<div class="md-tile-content">
-									<p class="singleRouteNumber">
-									route #{{$index+1}}
-									</p>
-									<h2><span ng-bind-html="route.kilometers | pathlenght"></span> <span class="conjunction">in</span> <span ng-if="route.time.minutes >= 1">{{route.time.minutes}}<span class="merry">min</span> <span class="conjunction">and</span> </span>{{route.time.seconds}}<span class="merry">sec</span></h2>
-									<p>
-										{{route.route[route.route.length -1].timestamp | parseDate}}
-									</p>
-								</div>
-							</md-item-content>
-						</md-item>
-					</md-list>
-				</section>
-			</md-content>
-		</md-tab>
 		<md-tab label="public transport">
     			<md-toolbar md-scroll-shrink id="routeFilter">
     			 <div layout="row" layout-sm="column" layout-align="space-around center">
@@ -215,7 +159,7 @@
     		</md-toolbar>
 
 			<md-content ng-style="{height: windowHeight}">
-				<section class="pushpush" ng-repeat="team in routes[3].values | orderBy:'values.length':true | filter:search | limitTo: lastNofTeams">
+				<section class="pushpush" ng-repeat="team in routes[2].values | orderBy:'values.length':true | filter:search | limitTo: lastNofTeams">
 					<md-subheader>
 						<div layout="row" layout-align="space-between center">
 						  <div>

@@ -59,6 +59,7 @@ angular.module('gogogoApp')
         }
     };
 
+    if($scope.autoupdate){
     timer = $interval(function(){
                      $scope.showSimpleToast()
                 apiService.getRoutes().then(
@@ -73,6 +74,7 @@ angular.module('gogogoApp')
                          killtimer();
                     })
             },15000);
+    }
 
   $scope.showSimpleToast = function() {
     $mdToast.show(
