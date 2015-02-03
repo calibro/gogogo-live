@@ -13,6 +13,7 @@ angular.module('gogogoApp')
     return function (input) {
 
       var dataLength = input.length;
+      var dataIDs = input.map(function(d){return d["_id"]})
 
       var data = d3.nest()
       				.key(function(d){return d.transport_method})
@@ -41,6 +42,6 @@ angular.module('gogogoApp')
       					})
       				.entries(input)
 
-      return {nested: data, entries: dataLength};
+      return {nested: data, entries: dataLength, ids: dataIDs};
     };
   });

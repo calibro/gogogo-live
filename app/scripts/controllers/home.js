@@ -26,8 +26,10 @@ angular.module('gogogoApp')
         $scope.routes = routes.nested;
         $scope.methods = $scope.routes.map(function(d){return d.key})
         $scope.dataLength = routes.entries;
+        $scope.dataIDs = routes.ids;
     }
     
+    console.log($scope.routes)
 
     $scope.windowHeight = ($window.innerHeight - 48 - 79) + 'px';
 
@@ -42,7 +44,10 @@ angular.module('gogogoApp')
     $scope.selectedTeamRoutes;
 
 
-
+    $scope.sortDate = function(d){
+        var t = d.route[d.route.length-1].timestamp;
+        return parseInt(t);
+    }
 
     $scope.teamSubmit = function(team){
         $scope.selectedTeam = team;
@@ -69,6 +74,7 @@ angular.module('gogogoApp')
                     function(data){
                         $scope.routes = data.nested;
                         $scope.dataLength = data.entries;
+                        $scope.dataIDs = routes.ids;
                         $scope.loading = false;
                         $scope.closeToast()
                     },
