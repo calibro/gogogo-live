@@ -29,8 +29,6 @@ angular.module('gogogoApp')
         $scope.dataIDs = routes.ids;
     }
     
-    console.log($scope.routes)
-
     $scope.windowHeight = ($window.innerHeight - 48 - 79) + 'px';
 
     $scope.lastNofRoutes = 10;

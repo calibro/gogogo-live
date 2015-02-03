@@ -303,18 +303,17 @@ angular.module('gogogoApp')
 
 		 }
 
-		// scope.$watch('dataLength', function(newValue, oldValue){
-  //         if(newValue != oldValue){
-  //             upadate()
-  //         }
-  //       }, true)
-
-		scope.$watch('dataIDs', function(newValue, oldValue){
+		scope.$watch('dataLength', function(newValue, oldValue){
           if(newValue != oldValue){
-               upadate()
-               console.log("ciao")
+              upadate()
           }
         })
+
+		// scope.$watch('dataIDs', function(newValue, oldValue){
+  //         if(newValue != oldValue){
+  //              upadate()
+  //         }
+  //       })
 
 		scope.$watch('selectedIndex', function(newValue, oldValue){
           if(newValue != oldValue){
