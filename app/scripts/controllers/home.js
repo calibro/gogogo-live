@@ -12,7 +12,7 @@ angular.module('gogogoApp')
 
     $scope.errors;
     $scope.methods;
-    $scope.autoupdate = true;
+    $scope.autoupdate = false;
 
     if(!routes.nested.length){
         $scope.routes = []

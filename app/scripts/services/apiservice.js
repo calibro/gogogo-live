@@ -10,7 +10,8 @@
 angular.module('gogogoApp')
   .factory('apiService', function ($http, $q, routesFilter) {
 
-    var BASE_API_URL = 'http://188.226.235.250';
+    //var BASE_API_URL = 'http://188.226.235.250';
+    var BASE_API_URL = 'http://188.226.184.134';
 
     return {
      getRoutes : function(teamID){
