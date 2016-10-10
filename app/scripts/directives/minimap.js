@@ -20,11 +20,11 @@ angular.module('gogogoApp')
 		var line = [];
 
 		route.forEach(function(d){
-			var lat = parseFloat(d.coordinates.latitude),
-					lon = parseFloat(d.coordinates.longitude);
+			var lat = d.coord[0],
+					lon = d.coord[1];
 			line.push([lon, lat])
 		})
-		
+
 		line = stats.turfLine(line)
 
 

@@ -21,7 +21,7 @@ angular.module('gogogoApp')
 	    	team,
 	    	mapData,
 	    	mapDataLine;
-	    
+
 
 	    var mapTeam = L.map(
 	     	element[0]//,
@@ -45,29 +45,28 @@ angular.module('gogogoApp')
       	if(scope.errors){
       		return;
       	}
-		
+
 		var data = scope.routes.filter(function(d){return d.key == scope.selectedTab}),
 			featuresPoint = [],
 			featuresLine = [],
 			radius = 5;
 
 		data[0].values.forEach(function(d){
-
 			var lastRoute = d.values[d.values.length -1],
-				teamId = lastRoute.teamid,
-				lat = parseFloat(lastRoute.route[lastRoute.route.length -1].coordinates.latitude),
-      			lon = parseFloat(lastRoute.route[lastRoute.route.length -1].coordinates.longitude),
-      			timestamp = lastRoute.route[lastRoute.route.length -1].timestamp
+				teamId = lastRoute['tId'],
+				lat = lastRoute.route[lastRoute.route.length -1].coord[0],
+      			lon = lastRoute.route[lastRoute.route.length -1].coord[1],
+      			timestamp = lastRoute.route[lastRoute.route.length -1].t
 
 			var line = [];
 
 			lastRoute.route.forEach(function(e){
-				var lat = parseFloat(e.coordinates.latitude),
-					lon = parseFloat(e.coordinates.longitude);
+				var lat = e.coord[0],
+					lon = e.coord[1];
 				line.push([lon, lat])
 			})
-				
-			
+
+
 			line = stats.turfLine(line, {team:teamId})
 
 
@@ -84,7 +83,7 @@ angular.module('gogogoApp')
 
 
         linePath = g.selectAll(".line").data(mapDataLine.features)
-          
+
          linePath.enter()
           .append("path")
           .attr("class", "line")
@@ -94,7 +93,7 @@ angular.module('gogogoApp')
           .attr("stroke-opacity", 0.6)
 
         team = g.selectAll(".teams").data(mapData.features)
-          
+
          team.enter()
           .append("path")
           .attr("class", function(d,i){return "team t_"+i;})
@@ -110,7 +109,7 @@ angular.module('gogogoApp')
 
 	      // Reposition the SVG to cover the features.
 		  function reset(first) {
-		  	
+
 		  	path.pointRadius(radius);
 
 		    var bounds = path.bounds(mapDataLine),
@@ -138,7 +137,7 @@ angular.module('gogogoApp')
 
 
 
-			    
+
 			    if(first === true){
 			    	linePath.attr("d", path).call(transition)
 			    	team.attr("d", path);
@@ -168,17 +167,17 @@ angular.module('gogogoApp')
 			      _this = this;
 
 			  var point = d3.select(".t_"+i);
-			
+
 			  var originalPosition = point.attr('d').split('m')[0].replace("M","").split(",");
-				
+
 			  var origignalX= +originalPosition[0],
 				origignalY= +originalPosition[1]
 
-			  return function(t) { 
+			  return function(t) {
 			   	var p = _this.getPointAtLength(t * l);
 				point.attr("transform", "translate(" + (p.x - origignalX)+ "," + (p.y - origignalY) + ")");//move marker
 
-			  	return it(t); 
+			  	return it(t);
 			  };
         } //end tweenDash
 
@@ -190,20 +189,20 @@ angular.module('gogogoApp')
 			data[0].values.forEach(function(d){
 
 				var lastRoute = d.values[d.values.length -1],
-					teamId = lastRoute.teamid,
-					lat = parseFloat(lastRoute.route[lastRoute.route.length -1].coordinates.latitude),
-	      			lon = parseFloat(lastRoute.route[lastRoute.route.length -1].coordinates.longitude),
-	      			timestamp = lastRoute.route[lastRoute.route.length -1].timestamp
+					teamId = lastRoute['tId'],
+					lat = lastRoute.route[lastRoute.route.length -1].coord[0],
+	      			lon = lastRoute.route[lastRoute.route.length -1].coord[1],
+	      			timestamp = lastRoute.route[lastRoute.route.length -1].t
 
 				var line = [];
 
 				lastRoute.route.forEach(function(e){
-					var lat = parseFloat(e.coordinates.latitude),
-						lon = parseFloat(e.coordinates.longitude);
+					var lat = e.coord[0],
+						lon = e.coord[1];
 					line.push([lon, lat])
 				})
-					
-				
+
+
 				line = stats.turfLine(line, {team:teamId})
 
 
@@ -227,19 +226,19 @@ angular.module('gogogoApp')
 				teamData[0].values.forEach(function(d){
 
 					var teamId = d.teamid,
-						lat = parseFloat(d.route[d.route.length -1].coordinates.latitude),
-		      			lon = parseFloat(d.route[d.route.length -1].coordinates.longitude),
-		      			timestamp = d.route[d.route.length -1].timestamp
+						lat = d.route[d.route.length -1].coord[0],
+		      			lon = d.route[d.route.length -1].coord[1],
+		      			timestamp = d.route[d.route.length -1].t;
 
 					var line = [];
 
 					d.route.forEach(function(e){
-						var lat = parseFloat(e.coordinates.latitude),
-							lon = parseFloat(e.coordinates.longitude);
+						var lat = e.coord[0],
+							lon = e.coord[1];
 						line.push([lon, lat])
 					})
-						
-					
+
+
 					line = stats.turfLine(line, {team:teamId})
 
 
@@ -249,7 +248,7 @@ angular.module('gogogoApp')
 					featuresLine.push(line)
 
 				})
-				
+
 				return {points: turf.featurecollection(featuresPoint), lines: turf.featurecollection(featuresLine)}
 
 			}else{
@@ -258,7 +257,7 @@ angular.module('gogogoApp')
 		}
 
 		 var upadate = function(){
-		 	
+
 
 			data = scope.routes.filter(function(d){return d.key == scope.selectedTab});
 
@@ -326,9 +325,9 @@ angular.module('gogogoApp')
 
 		scope.$watch('selectedTeam', function(newValue, oldValue){
           if(newValue != oldValue){
-          	
+
           	if(newValue){
-          		
+
 
           		var st = scope.routes[scope.selectedIndex].values
           									.filter(function(d){

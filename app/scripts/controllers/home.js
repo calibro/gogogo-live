@@ -10,6 +10,7 @@
 angular.module('gogogoApp')
   .controller('HomeCtrl', function ($scope, $window, $interval, $mdToast, $animate, apiService, routes, routesFilter, routesService ) {
 
+    routes = routesFilter(routes);
     $scope.errors;
     $scope.methods;
     $scope.autoupdate = false;
@@ -28,7 +29,7 @@ angular.module('gogogoApp')
         $scope.dataLength = routes.entries;
         $scope.dataIDs = routes.ids;
     }
-    
+
     $scope.windowHeight = ($window.innerHeight - 48 - 79) + 'px';
 
     $scope.lastNofRoutes = 10;

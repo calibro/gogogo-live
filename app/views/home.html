@@ -11,7 +11,7 @@
     	</div>
     	<div ng-if="selectedTeam">
     		<p>
-    			<b>{{selectedTeamRoutes}}</b> routes of the team <b>{{selectedTeam}}</b> are displayed 
+    			<b>{{selectedTeamRoutes}}</b> routes of the team <b>{{selectedTeam}}</b> are displayed
     			<md-button class="md-warn" ng-click="teamClear()">back to all</md-button>
     		</p>
     	</div>
@@ -75,7 +75,7 @@
 									</p>
 									<h2><span ng-bind-html="route.kilometers | pathlenght"></span> <span class="conjunction">in</span> <span ng-if="route.time.minutes >= 1">{{route.time.minutes}}<span class="merry">min</span> <span class="conjunction">and</span> </span>{{route.time.seconds}}<span class="merry">sec</span></h2>
 									<p>
-										{{route.route[route.route.length -1].timestamp | parseDate}}
+										{{route.route[route.route.length -1].t | parseDate}}
 									</p>
 								</div>
 							</md-item-content>
@@ -131,7 +131,7 @@
 									</p>
 									<h2><span ng-bind-html="route.kilometers | pathlenght"></span> <span class="conjunction">in</span> <span ng-if="route.time.minutes >= 1">{{route.time.minutes}}<span class="merry">min</span> <span class="conjunction">and</span> </span>{{route.time.seconds}}<span class="merry">sec</span></h2>
 									<p>
-										{{route.route[route.route.length -1].timestamp | parseDate}}
+										{{route.route[route.route.length -1].t | parseDate}}
 									</p>
 								</div>
 							</md-item-content>
@@ -187,7 +187,7 @@
 									</p>
 									<h2><span ng-bind-html="route.kilometers | pathlenght"></span> <span class="conjunction">in</span> <span ng-if="route.time.minutes >= 1">{{route.time.minutes}}<span class="merry">min</span> <span class="conjunction">and</span> </span>{{route.time.seconds}}<span class="merry">sec</span></h2>
 									<p>
-										{{route.route[route.route.length -1].timestamp | parseDate}}
+										{{route.route[route.route.length -1].t | parseDate}}
 									</p>
 								</div>
 							</md-item-content>

@@ -26,7 +26,8 @@ angular
         controller: 'HomeCtrl',
         resolve: {
           routes : function (fileService, apiService) {
-            return apiService.getRoutes()
+            //return apiService.getRoutes()
+            return fileService.getFile('data/routemini.json')
           }
         }
       })
