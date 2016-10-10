@@ -2,34 +2,38 @@
 
 /**
  * @ngdoc overview
- * @name gogogoAppApp
+ * @name gogogoApp
  * @description
- * # gogogoAppApp
+ * # gogogoApp
  *
  * Main module of the application.
  */
 angular
-  .module('gogogoAppApp', [
+  .module('gogogoApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.bootstrap'
   ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
+      .when('/home', {
+        templateUrl: 'views/home.html',
+        controller: 'HomeCtrl',
+        controllerAs: 'home'
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
+      .when('/explore', {
+        templateUrl: 'views/explore.html',
+        controller: 'ExploreCtrl',
+        controllerAs: 'explore'
+      })
+      .when('/', {
+        redirectTo: '/home'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/home'
       });
   });

@@ -17,7 +17,7 @@
     "angular-mocks": "^1.4.0"
   },
   "appPath": "app",
-  "moduleName": "gogogoAppApp",
+  "moduleName": "gogogoApp",
   "overrides": {
     "bootstrap": {
       "main": [

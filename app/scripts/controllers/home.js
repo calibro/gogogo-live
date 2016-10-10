@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name gogogoAppApp.controller:MainCtrl
+ * @name gogogoApp.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of the gogogoAppApp
+ * Controller of the gogogoApp
  */
-angular.module('gogogoAppApp')
-  .controller('MainCtrl', function () {
+angular.module('gogogoApp')
+  .controller('HomeCtrl', function () {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',

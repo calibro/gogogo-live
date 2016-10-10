@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name gogogoAppApp.controller:AboutCtrl
+ * @name gogogoApp.controller:AboutCtrl
  * @description
  * # AboutCtrl
- * Controller of the gogogoAppApp
+ * Controller of the gogogoApp
  */
-angular.module('gogogoAppApp')
-  .controller('AboutCtrl', function () {
+angular.module('gogogoApp')
+  .controller('ExploreCtrl', function () {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
