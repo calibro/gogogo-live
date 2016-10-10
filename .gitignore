@@ -1,7 +1,5 @@
-node_modules
-dist
-.tmp
-.sass-cache
-bower_components
-app/data
-.DS_store
+/node_modules
+/dist
+/.tmp
+/.sass-cache
+/bower_components
