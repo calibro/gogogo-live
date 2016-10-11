@@ -9,9 +9,5 @@
  */
 angular.module('gogogoApp')
   .controller('HomeCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+
   });

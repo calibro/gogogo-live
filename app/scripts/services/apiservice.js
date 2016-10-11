@@ -8,8 +8,8 @@
  * Factory in the gogogoApp.
  */
 angular.module('gogogoApp')
-  .factory('apiservice', function ($http, $q) {
-    
+  .factory('apiservice', function ($http, $q, routesFilter) {
+
     var BASE_API_URL = 'http://149.210.213.121';
 
     return {
@@ -22,6 +22,7 @@ angular.module('gogogoApp')
           cache: false,
           url : BASE_API_URL + (teamID ? serviceUrl + '/' + teamID : serviceUrl),
         }).success(function(data){
+          console.log(data)
          deferred.resolve(routesFilter(data));
        }).error(function(){
          deferred.reject('An error occured while fetching data');

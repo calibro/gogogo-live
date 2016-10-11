@@ -8,10 +8,15 @@
  * Controller of the gogogoApp
  */
 angular.module('gogogoApp')
-  .controller('ExploreCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('ExploreCtrl', function ($scope, apiservice) {
+    $scope.routes,
+    $scope.errors;
+
+    apiservice.getRoutes()
+      .then(function(data){
+          $scope.routes = data;
+          console.log(data)
+        },function(error){
+          $scope.errors = error;
+        })
   });
