@@ -16,7 +16,7 @@ angular.module('gogogoApp')
       },
       link: function (scope, element, attrs) {
 
-        var route = scope.route,
+        var route = turf.flip(scope.route),
             width = 100,
             height = 100;
 

@@ -10,7 +10,7 @@
           ng-model="searchTeam"
           placeholder="Search team"
           typeahead-on-select="onSelectedTeam($item, $model, $label, $event)"
-          uib-typeahead="team for team in teams | filter:$viewValue "
+          uib-typeahead="team for team in teamsList | filter:$viewValue "
           class="form-control"
         >
         </div>
@@ -41,16 +41,31 @@
         </div>
       </div>
       <div class="routesContainer">
-      <div ng-repeat="(key, value) in routes.features |  limitTo: 10 | routes:filters:slider | groupBy: 'properties.teamid'">
-        <h3>{{key}}</h3>
-        <div ng-repeat="route in value">
-          <p>
-            {{route.properties.tm}} - {{route.properties.distance}}km - in {{(route.properties.endDatetime-route.properties.startDatetime) | date:'HH:mm:ss':'+000'}}
-          </p>
-          <p>
-            Started on {{route.properties.startDatetime | date:'MMM d, y'}} at {{route.properties.startDatetime | date:'HH:mm:ss'}} and arrived at {{route.properties.endDatetime | date:'HH:mm:ss'}}
-          </p>
-          <div minimap route="route"></div>
+      <div ng-repeat="team in teams | filter: { key: filters.selectedTeam } | routes:filters ">
+        <div ng-if="team.shown">
+          <h3>{{team.key}}</h3>
+          <div ng-repeat="route in team.values" ng-if="route.properties.show">
+            <p>
+              {{route.properties.tm}} - {{route.properties.distance}}km - in {{(route.properties.endDatetime-route.properties.startDatetime) | date:'HH:mm:ss':'+000'}}
+            </p>
+            <p>
+              Started on {{route.properties.startDatetime | date:'MMM d, y'}} at {{route.properties.startDatetime | date:'HH:mm:ss'}} and arrived at {{route.properties.endDatetime | date:'HH:mm:ss'}}
+            </p>
+            <div minimap route="route"></div>
+            <button class="btn btn-default" ng-click="getSingleRoute(team.key, route.properties.id)">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-default" ng-click="removeSingleRoute()">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+            <div class="singleRoute" ng-if="singleRoute && route.properties.id == singleRoute.features[0].properties.id">
+              <ul>
+                <li ng-repeat="line in singleRoute.features">
+                  {{ line.properties.emotion }} - {{ line.properties.startDatetime | date:'HH:mm:ss' }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

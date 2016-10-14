@@ -84,6 +84,67 @@ angular.module('gogogoApp')
             ]],{padding:100});
         }
 
+      var updateSingle = function(data){
+        map.setLayoutProperty('routes', 'visibility', 'none');
+        map.setLayoutProperty('routes-hover', 'visibility', 'none');
+
+        var singleRouteSource = map.getSource('singleroute');
+
+        if(!singleRouteSource){
+          map.addSource("singleroute", {
+              "type": "geojson",
+              "data": data
+          })
+
+          map.addLayer({
+              "id": "singleroute",
+              "type": "line",
+              "source": "singleroute",
+              "layout": {
+                  "line-join": "round",
+                  "line-cap": "round"
+              },
+              "paint": {
+                  "line-color":{
+                      property: 'emotion',
+                      type: 'categorical',
+                      stops: [
+                          ['1', '#d7191c'],
+                          ['2', '#fdae61'],
+                          ['3', '#ffffbf'],
+                          ['4', '#a6d96a'],
+                          ['5', '#1a9641']]
+                  },
+                  "line-width": 3
+              }
+          });
+
+          var bbox = turf.bbox(data);
+
+          map.fitBounds([[
+                bbox[0],
+                bbox[1]
+            ], [
+                bbox[2],
+                bbox[3]
+            ]],{padding:100});
+
+        }else {
+          map.setLayoutProperty('singleroute', 'visibility', 'visible');
+          singleRouteSource.setData(data);
+          var bbox = turf.bbox(data);
+
+          map.fitBounds([[
+                bbox[0],
+                bbox[1]
+            ], [
+                bbox[2],
+                bbox[3]
+            ]],{padding:100});
+        }
+
+      }
+
   		scope.$watch('routes.features.length', function(newValue, oldValue){
             if(newValue != oldValue && newValue){
               if(map.loaded()){
@@ -96,37 +157,53 @@ angular.module('gogogoApp')
             }//end if change
           })
 
-          scope.$watchGroup(['filters.bike', 'filters.walking','filters.selectedTeam','slider.minValue','slider.maxValue'], function(newValues, oldValues, scope) {
-            if(newValues[3] && newValues[4] && map.loaded()){
-              var methods = ['in','tm'];
-
-              if(newValues[0]){
-                methods.push('bike')
-              }
-
-              if(newValues[1]){
-                methods.push('walking')
-              }
-
-              if(newValues[2]){
-                map.setFilter('routes',[
-                  'all',
-                  methods,
-                  ['==', 'teamid', newValues[2]],
-                  ['>', 'startDatetime', newValues[3]],
-                  ['<', 'endDatetime', newValues[4]]
-                ]);
+      scope.$watch('singleRoute.features.length', function(newValue, oldValue){
+            if(newValue != oldValue && newValue){
+              if(map.loaded()){
+                updateSingle(scope.singleRoute);
               }else{
-                map.setFilter('routes',[
-                  'all',
-                  methods,
-                  ['>', 'startDatetime', newValues[3]],
-                  ['<', 'endDatetime', newValues[4]]
-                ]);
+                map.on('load', function () {
+                  updateSingle(scope.singleRoute);
+                })
               }
-            }
+            }else if(newValue != oldValue && !newValue){
+              map.setLayoutProperty('routes', 'visibility', 'visible');
+              map.setLayoutProperty('routes-hover', 'visibility', 'visible');
+              map.setLayoutProperty('singleroute', 'visibility', 'none');
+            }//end if change
+          })
 
-          });
+      scope.$watchGroup(['filters.bike', 'filters.walking','filters.selectedTeam','slider.minValue','slider.maxValue'], function(newValues, oldValues, scope) {
+        if(newValues[3] && newValues[4] && map.loaded()){
+          var methods = ['in','tm'];
+
+          if(newValues[0]){
+            methods.push('bike')
+          }
+
+          if(newValues[1]){
+            methods.push('walking')
+          }
+
+          if(newValues[2]){
+            map.setFilter('routes',[
+              'all',
+              methods,
+              ['==', 'teamid', newValues[2]],
+              ['>', 'startDatetime', newValues[3]],
+              ['<', 'endDatetime', newValues[4]]
+            ]);
+          }else{
+            map.setFilter('routes',[
+              'all',
+              methods,
+              ['>', 'startDatetime', newValues[3]],
+              ['<', 'endDatetime', newValues[4]]
+            ]);
+          }
+        }
+
+      });
 
       }
     };
