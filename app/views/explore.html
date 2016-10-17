@@ -2,42 +2,59 @@
   <div class="row fullHeight">
     <div class="col-md-6 fullHeight">
     <div class="filtersContainer">
-      <h3>GoGoGo</h3>
-      <div class="row">
+      <h3 class="mainTitle">GoGoGo</h3>
+      <div class="row search">
         <div class="col-md-6">
-        <input
-          type="text"
-          ng-model="searchTeam"
-          placeholder="Search team"
-          typeahead-on-select="onSelectedTeam($item, $model, $label, $event)"
-          uib-typeahead="team for team in teamsList | filter:$viewValue "
-          class="form-control"
-        >
+          <input
+            type="text"
+            ng-model="searchTeam"
+            placeholder="Search team"
+            typeahead-on-select="onSelectedTeam($item, $model, $label, $event)"
+            uib-typeahead="team for team in teamsList | filter:$viewValue "
+            class="form-control"
+          >
         </div>
         <div class="col-md-6">
           <button ng-if="filters.selectedTeam" ng-click="removeTeam()" type="button" class="btn btn-default">
             {{filters.selectedTeam}}
             <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
           </button>
+          <button ng-click="isCollapsed = !isCollapsed" type="button" class="btn btn-default pull-right">
+            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+          </button>
+
         </div>
       </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" ng-model="filters.bike">
-            Bike
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" ng-model="filters.walking">
-            Walking
-          </label>
-        </div>
-        <rzslider rz-slider-model="slider.minValue"
-          rz-slider-high="slider.maxValue"
-          rz-slider-options="slider.options"></rzslider>
-        <div style="width:100%" slideraxes>
-
+        <div class="filtersCollapse">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="checkbox-btn">
+                <span class="icon-Bike-1" aria-hidden="true"></span>
+                <span class="checkbox-txt">
+                  Bike
+                </span>
+                <span class="pull-right">
+                  <input type="checkbox" ng-model="filters.bike">
+                </span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="checkbox-btn">
+                <span class="icon-Converse" aria-hidden="true"></span>
+                <span class="checkbox-txt">
+                  Walking
+                </span>
+                <span class="pull-right">
+                  <input type="checkbox" ng-model="filters.walking">
+                </span>
+              </div>
+            </div>
+          </div>
+          <rzslider rz-slider-model="slider.minValue"
+            rz-slider-high="slider.maxValue"
+            rz-slider-options="slider.options"></rzslider>
+          <div style="width:100%" slideraxes>
+          </div>
         </div>
       </div>
       <div class="routesContainer">

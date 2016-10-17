@@ -20,6 +20,7 @@ angular.module('gogogoApp')
       minValue:'',
       maxValue:''
     };
+    $scope.isCollapsed = true;
 
     var dateFormat = d3.timeFormat("%d/%m %H:%M");
     $scope.slider = {

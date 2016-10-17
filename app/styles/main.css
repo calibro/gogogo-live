@@ -16,3 +16,64 @@ body,html{
   overflow: scroll;
   padding-bottom: 20px;
 }
+
+.mainTitle{
+  color:white;
+  background-color: #162933;
+  text-align: center;
+  margin: 0px -15px;
+  padding: 10px 0px;
+}
+
+.search{
+  background-color: #F0F3F8;
+  padding: 10px 0px;
+}
+
+.dropdown-menu{
+  width: calc(100% - 30px);
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #162933;
+    outline: 0;
+}
+
+.filtersCollapse{
+  background-color: #F0F3F8;
+  /*transform: translate(0,-100%);*/
+  transition: transform 0.5s;
+  z-index: 0;
+  margin: 0px -15px;
+  padding: 0px 15px;
+}
+
+.checkbox-group{
+
+}
+
+.checkbox-btn{
+  background-color: white;
+  border: 1px solid #EBEBEB;
+  padding: 10px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checkbox-btn [class^="icon-"],
+.checkbox-btn [class*=" icon-"]{
+  font-size: 28px;
+  color: #ccc;
+  margin-right: 10px;
+}
+
+.checkbox-btn .checkbox-txt{
+  flex-grow: 1;
+}
