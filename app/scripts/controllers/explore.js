@@ -20,7 +20,7 @@ angular.module('gogogoApp')
       minValue:'',
       maxValue:''
     };
-    $scope.isCollapsed = true;
+    $scope.isOpen = false;
 
     var dateFormat = d3.timeFormat("%d/%m %H:%M");
     $scope.slider = {
@@ -45,6 +45,7 @@ angular.module('gogogoApp')
     };
 
     $scope.onSelectedTeam = function(item, model, label, event){
+      $scope.removeSingleRoute();
       $scope.filters.selectedTeam = item;
     }
 
@@ -57,12 +58,16 @@ angular.module('gogogoApp')
     }
 
     $scope.getSingleRoute = function(teamid, routeid){
-      apiservice.getSingleRoute(teamid, routeid)
-        .then(function(data){
-          $scope.singleRoute = data;
-        },function(error){
-          $scope.errors = error;
-        });
+      if(!$scope.singleRoute || routeid != $scope.singleRoute.features[0].properties.id){
+        apiservice.getSingleRoute(teamid, routeid)
+          .then(function(data){
+            $scope.singleRoute = data;
+          },function(error){
+            $scope.errors = error;
+          });
+      }else{
+        $scope.removeSingleRoute();
+      }
     }
 
     apiservice.getRoutes()

@@ -1,6 +1,6 @@
 <div class="container-fluid fullHeight">
   <div class="row fullHeight">
-    <div class="col-md-6 fullHeight">
+    <div class="col-md-6 flex">
     <div class="filtersContainer">
       <h3 class="mainTitle">GoGoGo</h3>
       <div class="row search">
@@ -19,68 +19,80 @@
             {{filters.selectedTeam}}
             <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
           </button>
-          <button ng-click="isCollapsed = !isCollapsed" type="button" class="btn btn-default pull-right">
+          <button ng-click="isOpen = !isOpen" type="button" class="btn btn-default pull-right">
             <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
           </button>
 
         </div>
       </div>
-        <div class="filtersCollapse">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="checkbox-btn">
-                <span class="icon-Bike-1" aria-hidden="true"></span>
-                <span class="checkbox-txt">
-                  Bike
-                </span>
-                <span class="pull-right">
-                  <input type="checkbox" ng-model="filters.bike">
-                </span>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="checkbox-btn">
-                <span class="icon-Converse" aria-hidden="true"></span>
-                <span class="checkbox-txt">
-                  Walking
-                </span>
-                <span class="pull-right">
-                  <input type="checkbox" ng-model="filters.walking">
-                </span>
-              </div>
+      </div>
+      <div class="collapseWrapper" ng-class="{collapseHeight: !isOpen}">
+      <div class="filtersCollapse" ng-class="{filtersOpen: isOpen}">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="checkbox-btn">
+              <span class="icon-Bike-1" aria-hidden="true"></span>
+              <span class="checkbox-txt">
+                Bike
+              </span>
+              <span class="pull-right">
+                <input type="checkbox" ng-model="filters.bike">
+              </span>
             </div>
           </div>
+          <div class="col-md-4">
+            <div class="checkbox-btn">
+              <span class="icon-Converse" aria-hidden="true"></span>
+              <span class="checkbox-txt">
+                Walking
+              </span>
+              <span class="pull-right">
+                <input type="checkbox" ng-model="filters.walking">
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="sliderContainer">
           <rzslider rz-slider-model="slider.minValue"
             rz-slider-high="slider.maxValue"
             rz-slider-options="slider.options"></rzslider>
           <div style="width:100%" slideraxes>
           </div>
-        </div>
+       </div>
       </div>
+  </div>
       <div class="routesContainer">
       <div ng-repeat="team in teams | filter: { key: filters.selectedTeam } | routes:filters ">
         <div ng-if="team.shown">
-          <h3>{{team.key}}</h3>
-          <div ng-repeat="route in team.values" ng-if="route.properties.show">
+          <h3 class="teamNumber">{{team.key}}</h3>
+          <div class="media" ng-repeat="route in team.values" ng-if="route.properties.show" ng-click="getSingleRoute(team.key, route.properties.id)">
+            <div class="media-body">
+            <h6 class="routeNumber">route {{$index+1}}</h6>
             <p>
-              {{route.properties.tm}} - {{route.properties.distance}}km - in {{(route.properties.endDatetime-route.properties.startDatetime) | date:'HH:mm:ss':'+000'}}
+              <span ng-class="{walking:'icon-Converse', bike:'icon-Bike-1'}[route.properties.tm]" aria-hidden="true"></span>
+              <span class="routeInfo">{{route.properties.distance}}</span>km in <span class="routeInfo">{{(route.properties.endDatetime-route.properties.startDatetime) | date:'HH:mm:ss':'+000'}}</span>
             </p>
             <p>
               Started on {{route.properties.startDatetime | date:'MMM d, y'}} at {{route.properties.startDatetime | date:'HH:mm:ss'}} and arrived at {{route.properties.endDatetime | date:'HH:mm:ss'}}
             </p>
-            <div minimap route="route"></div>
-            <button class="btn btn-default" ng-click="getSingleRoute(team.key, route.properties.id)">
+            <!-- <button class="btn btn-default" ng-click="getSingleRoute(team.key, route.properties.id)">
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
             <button class="btn btn-default" ng-click="removeSingleRoute()">
               <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </button>
+            -->
+            <!-- <div class="singleRoute" uib-collapse="route.properties.id != singleRoute.features[0].properties.id"> -->
             <div class="singleRoute" ng-if="singleRoute && route.properties.id == singleRoute.features[0].properties.id">
               <ul>
                 <li ng-repeat="line in singleRoute.features">
-                  {{ line.properties.emotion }} - {{ line.properties.startDatetime | date:'HH:mm:ss' }}
+                  <i class="em" ng-class="{1:'em-tired_face', 2:'em-worried',3:'em-neutral_face',4:'em-blush',5:'em-smile'}[line.properties.emotion]"></i> {{ line.properties.startDatetime | date:'HH:mm:ss' }}
                 </li>
               </ul>
+            </div>
+            </div>
+            <div class="media-right">
+              <div minimap route="route"></div>
             </div>
           </div>
         </div>

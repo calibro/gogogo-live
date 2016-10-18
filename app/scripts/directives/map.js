@@ -16,12 +16,15 @@ angular.module('gogogoApp')
         mapboxgl.accessToken = 'pk.eyJ1IjoidGVvIiwiYSI6IllvZUo1LUkifQ.dirqtn275pAKdnqtLM2HSw';
         var map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v9',
+            style: 'mapbox://styles/mapbox/light-v9',
             center: [4.9000,52.3667],
             minZoom:12,
             maxZoom:17,
             zoom: 13
         });
+
+
+        map.addControl(new mapboxgl.Navigation());
 
         var update = function(data){
           map.addSource("routes", {
