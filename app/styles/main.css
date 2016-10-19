@@ -10,6 +10,9 @@ body,html{
 .flex{
   display: flex;
   flex-direction: column;
+
+  display: -webkit-flex;
+  -webkit-flex-direction: column;
   max-height: 100vh;
 }
 
@@ -22,6 +25,7 @@ body,html{
   padding: 0px 0px 20px 0px;
   margin: 0 -15px;
   flex-shrink: 1;
+  -webkit-flex-shrink: 1;
 }
 
 .mainTitle{
@@ -64,6 +68,7 @@ body,html{
   max-height: 154px;
   transition: max-height 0.5s;
   flex-grow: 1;
+  -webkit-flex-grow: 1;
 }
 
 .collapseHeight{
@@ -79,9 +84,13 @@ body,html{
   border: 1px solid #EBEBEB;
   padding: 10px;
   display: flex;
+  display: -webkit-flex;
   flex-direction: row;
+  -webkit-flex-direction: row;
   align-items: center;
+  -webkit-align-items: center;
   justify-content: space-between;
+  -webkit-justify-content: space-between;
 }
 
 .checkbox-btn [class^="icon-"],
@@ -93,6 +102,7 @@ body,html{
 
 .checkbox-btn .checkbox-txt{
   flex-grow: 1;
+  -webkit-flex-grow: 1;
 }
 
 .sliderContainer{

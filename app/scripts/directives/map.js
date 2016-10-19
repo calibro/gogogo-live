@@ -24,7 +24,7 @@ angular.module('gogogoApp')
         });
 
 
-        map.addControl(new mapboxgl.Navigation());
+        map.addControl(new mapboxgl.NavigationControl());
 
         var update = function(data){
           map.addSource("routes", {
@@ -293,7 +293,8 @@ angular.module('gogogoApp')
           })
 
       scope.$watchGroup(['filters.bike', 'filters.walking','filters.selectedTeam','filters.minValue','filters.maxValue'], function(newValues, oldValues, scope) {
-        if(newValues[3] && newValues[4] && map.loaded()){
+
+        if(newValues[3] && newValues[4] && map.getSource('routes')){
           scope.removeSingleRoute();
           var methods = ['in','tm'];
 
@@ -306,6 +307,8 @@ angular.module('gogogoApp')
           }
 
           if(newValues[2]){
+            map.setLayoutProperty('routes', 'visibility', 'visible');
+            map.setLayoutProperty('routes-hover', 'visibility', 'visible');
             map.setFilter('routes',[
               'all',
               methods,
@@ -313,59 +316,18 @@ angular.module('gogogoApp')
               ['>', 'startDatetime', newValues[3]],
               ['<', 'endDatetime', newValues[4]]
             ]);
-            // var filteredFeatures = map.querySourceFeatures('routes', {
-            //     sourceLayer: 'routes',
-            //     filter: [
-            //       'all',
-            //       methods,
-            //       ['==', 'teamid', newValues[2]],
-            //       ['>', 'startDatetime', newValues[3]],
-            //       ['<', 'endDatetime', newValues[4]]
-            //     ]
-            // });
-            // if(filteredFeatures.length){
-            //   var fc = turf.featureCollection(filteredFeatures);
-            //   var bbox = turf.bbox(fc);
-            //
-            //   map.fitBounds([[
-            //         bbox[0],
-            //         bbox[1]
-            //     ], [
-            //         bbox[2],
-            //         bbox[3]
-            //     ]],{padding:100});
-            // }
 
           }else{
+            map.setLayoutProperty('routes', 'visibility', 'visible');
+            map.setLayoutProperty('routes-hover', 'visibility', 'visible');
             map.setFilter('routes',[
               'all',
               methods,
               ['>', 'startDatetime', newValues[3]],
               ['<', 'endDatetime', newValues[4]]
             ]);
-            // var filteredFeatures = map.querySourceFeatures('routes', {
-            //     sourceLayer: 'routes',
-            //     filter: [
-            //       'all',
-            //       methods,
-            //       ['>', 'startDatetime', newValues[3]],
-            //       ['<', 'endDatetime', newValues[4]]
-            //     ]
-            // });
-            // if(filteredFeatures.length){
-            //   var fc = turf.featureCollection(filteredFeatures);
-            //   var bbox = turf.bbox(fc);
-            //
-            //   map.fitBounds([[
-            //         bbox[0],
-            //         bbox[1]
-            //     ], [
-            //         bbox[2],
-            //         bbox[3]
-            //     ]],{padding:100});
-            // }
-          }
-        }
+          }//end if team
+        }//end if change
 
       });
 
