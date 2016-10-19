@@ -21,6 +21,10 @@ angular.module('gogogoApp')
       maxValue:''
     };
     $scope.isOpen = false;
+    $scope.mapCenter;
+    $scope.setCenter = function(center, emotion){
+      $scope.mapCenter = {center: center, emotion:emotion};
+    }
 
     var dateFormat = d3.timeFormat("%d/%m %H:%M");
     $scope.slider = {
@@ -46,6 +50,7 @@ angular.module('gogogoApp')
 
     $scope.onSelectedTeam = function(item, model, label, event){
       $scope.removeSingleRoute();
+      $scope.searchTeam = ''
       $scope.filters.selectedTeam = item;
     }
 

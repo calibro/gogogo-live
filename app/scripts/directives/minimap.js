@@ -21,10 +21,31 @@ angular.module('gogogoApp')
             height = 100;
 
         var canvas = d3.select(element[0]).append("canvas")
-            .attr("width", width)
-            .attr("height", height);
-
         var context = canvas.node().getContext("2d");
+
+        function getRetinaRatio() {
+              var devicePixelRatio = window.devicePixelRatio || 1
+              var backingStoreRatio = [
+                  context.webkitBackingStorePixelRatio,
+                  context.mozBackingStorePixelRatio,
+                  context.msBackingStorePixelRatio,
+                  context.oBackingStorePixelRatio,
+                  context.backingStorePixelRatio,
+                  1
+              ].reduce(function(a, b) { return a || b })
+
+              return devicePixelRatio / backingStoreRatio
+          }
+
+        var ratio = getRetinaRatio();
+
+        canvas
+          .attr("width", width*ratio)
+          .attr("height", height*ratio)
+          .style('width', width + 'px')
+          .style('height', height + 'px');
+
+        context.scale(ratio, ratio);
 
         var projection = d3.geoMercator().fitSize([width, height], route);
 
