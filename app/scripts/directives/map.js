@@ -55,11 +55,28 @@ angular.module('gogogoApp')
                   "line-cap": "round"
               },
               "paint": {
-                  "line-color": "rgba(0,0,255,1)",
+                  "line-color": "rgba(255,255,255,1)",
+                  "line-width": 1,
+                  "line-gap-width":3
+              },
+              "filter": ["==", "id", ""]
+          });
+
+          map.addLayer({
+              "id": "routes-hover-in",
+              "type": "line",
+              "source": "routes",
+              "layout": {
+                  "line-join": "round",
+                  "line-cap": "round"
+              },
+              "paint": {
+                  "line-color": "#284347",
                   "line-width": 3
               },
               "filter": ["==", "id", ""]
           });
+
 
 
           map.on('mousemove', function (e) {
@@ -67,8 +84,10 @@ angular.module('gogogoApp')
               map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
               if (features.length) {
                   map.setFilter("routes-hover", ["==", "id", features[0].properties.id]);
+                  map.setFilter("routes-hover-in", ["==", "id", features[0].properties.id]);
               } else {
                   map.setFilter("routes-hover", ["==", "id", ""]);
+                  map.setFilter("routes-hover-in", ["==", "id", ""]);
               }
           });
 
@@ -83,6 +102,7 @@ angular.module('gogogoApp')
               }
 
               var features = map.queryRenderedFeatures(e.point, { layers: ['routes-hover'] });
+              //var features = map.queryRenderedFeatures(e.point, { layers: ['routes'] });
 
               if (!features.length) {
                   return;
@@ -96,7 +116,7 @@ angular.module('gogogoApp')
                   scrollTo = $('#'+feature.properties.id);
 
               container.animate({
-                  scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
+                  scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop() - $('ddn-sticky-wrapper').height()
               });
 
           });
@@ -104,6 +124,7 @@ angular.module('gogogoApp')
           // Reset the route-hover layer's filter when the mouse leaves the map
           map.on("mouseout", function() {
               map.setFilter("routes-hover", ["==", "id", ""]);
+              map.setFilter("routes-hover-in", ["==", "id", ""]);
           });
 
           var bbox = turf.bbox(data);
@@ -120,6 +141,7 @@ angular.module('gogogoApp')
       var updateSingle = function(data){
         map.setLayoutProperty('routes', 'visibility', 'none');
         map.setLayoutProperty('routes-hover', 'visibility', 'none');
+        map.setLayoutProperty('routes-hover-in', 'visibility', 'none');
         if(map.getSource('emotion')){
           map.setLayoutProperty('emotion', 'visibility', 'none');
           map.setLayoutProperty('emotion-bg', 'visibility', 'none');
@@ -282,6 +304,7 @@ angular.module('gogogoApp')
             }else if(newValue != oldValue && !newValue){
               map.setLayoutProperty('routes', 'visibility', 'visible');
               map.setLayoutProperty('routes-hover', 'visibility', 'visible');
+              map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
               map.setLayoutProperty('singleroute', 'visibility', 'none');
               map.setLayoutProperty('startend', 'visibility', 'none');
               if(map.getSource('emotion')){
@@ -309,6 +332,7 @@ angular.module('gogogoApp')
           if(newValues[2]){
             map.setLayoutProperty('routes', 'visibility', 'visible');
             map.setLayoutProperty('routes-hover', 'visibility', 'visible');
+            map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
             map.setFilter('routes',[
               'all',
               methods,
@@ -320,6 +344,7 @@ angular.module('gogogoApp')
           }else{
             map.setLayoutProperty('routes', 'visibility', 'visible');
             map.setLayoutProperty('routes-hover', 'visibility', 'visible');
+            map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
             map.setFilter('routes',[
               'all',
               methods,

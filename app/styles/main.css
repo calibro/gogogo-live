@@ -1,10 +1,98 @@
 body,html{
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  font-family: 'chivo', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .fullHeight{
   height: 100%;
+}
+
+.flexHome{
+  display: flex;
+  flex-direction: column;;
+
+  display: -webkit-flex;
+  -webkit-flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  color: white;
+}
+
+.subtitle{
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-left: 15px;
+}
+
+.rowHomeFlex{
+  width: 100%;
+  flex-grow: 1;
+}
+
+#map-bg{
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    top: 20px;
+    right: 20px;
+    pointer-events: none;
+    background: black;
+}
+
+#map-bg .mapboxgl-canvas-container{
+  opacity: 0.45;
+}
+#map-bg .mapboxgl-ctrl-attrib.mapboxgl-ctrl{
+  display: none;
+}
+
+.homeExplore{
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  border-radius: 0px;
+  border-color: white;
+  border-width: 2px;
+  transition: all 0.5s;
+  margin: 15px 0px 40px 0px;
+}
+
+.homeExplore span{
+  margin-left: 25px;
+  padding: 1px;
+}
+
+.homeExplore:hover{
+  color: black;
+  border-color: white;
+}
+
+.credits{
+  margin-bottom: 25px;
+}
+.author{
+  margin-right: 25px;
+}
+
+.author p{
+  font-size: 12px;
+  font-weight: 100;
+}
+
+.desc{
+  margin: 0px;
+}
+
+.logo{
+  margin-top: -1%;
+  width: 102%;
+  margin-left: -1%;
 }
 
 .flex{
@@ -17,7 +105,7 @@ body,html{
 }
 
 .filtersContainer{
-  z-index: 1;
+  z-index: 2;
 }
 
 .routesContainer{
@@ -26,19 +114,28 @@ body,html{
   margin: 0 -15px;
   flex-shrink: 1;
   -webkit-flex-shrink: 1;
+  position: relative;
 }
 
 .mainTitle{
   color:white;
-  background-color: #162933;
-  text-align: center;
+  background-color: #284347;
   margin: 0px -15px;
+  text-align: center;
   padding: 10px 0px;
 }
 
+.mainTitle img{
+  width: 40%;
+}
+
 .search{
-  background-color: #F0F3F8;
+  background-color: #fff;
   padding: 10px 0px;
+}
+
+.search .form-control {
+  background-color: #F2F2F2;
 }
 
 .dropdown-menu{
@@ -56,7 +153,7 @@ body,html{
 
 .filtersCollapse{
   position: relative;
-  background-color: #F0F3F8;
+  background-color: white;
   transform: translate(0,-100%);
   transition: transform 0.5s;
   z-index: 0;
@@ -126,7 +223,7 @@ svg .tick line{
     z-index: 3;
     width: 18px;
     height: 18px;
-    background-color: #535F6E;
+    background-color: #313D3F;
     -webkit-border-radius: 9px;
     -moz-border-radius: 9px;
     border-radius: 9px;
@@ -137,7 +234,7 @@ svg .tick line{
 }
 
 .rzslider .rz-bar.rz-selection {
-    background: #535F6E;
+    background: #313D3F;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
@@ -170,28 +267,62 @@ svg .tick line{
   border-bottom: 1px solid #EDF0F5;
   cursor: pointer;
   transition: background 0.5s;
-  padding: 15px;
+  padding: 15px 15px 0 15px;
   margin-top: 0px;
 }
 
 .media:hover{
-  background:#EDF0F5;
+  background:#F4F9F9;
 }
 
 .routeInfo{
-  font-size: 20px;
+  font-size: 28px;
   font-weight: bold;
   letter-spacing: 1px;
 }
 
 .teamNumber{
-  background: #F0F3F8;
-  margin: 0px;
   padding: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.teamRoutes{
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 100;
+  letter-spacing: 1px;
+}
+
+.teamHeader{
+  border-bottom: 1px solid #EFEFEF;
+  margin: 0px;
+}
+
+.singleRoute{
+  margin: 0px -15px;
+  background: #313D3F;
+  padding: 15px 0px;
 }
 
 .singleRoute ul{
   list-style-type: none;
+}
+
+.singleRoute ul li,
+.emoStep{
+    color: #6D6D6D;
+}
+
+.emoStep{
+  margin-left: 5px;
+}
+
+.singleRoute ul li:last-child,
+.singleRoute ul li:first-child
+{
+  color:white;
 }
 
 .singleRoute ul li:not(:last-child){
@@ -202,9 +333,9 @@ svg .tick line{
   margin: 0 -15px;
 }
 
-.mediaActive{
-  border-top: 2px solid #162933;
-  border-bottom: 2px solid #162933;
+.mediaActive,
+.mediaActive:hover{
+  background: #D7E3E5;
 }
 
 .emoLine{
@@ -234,4 +365,47 @@ svg .tick line{
 
 .emoLine.smile{
   border-left-color: #1a9641;
+}
+
+ddn-sticky-wrapper,
+ddn-sticky {
+  display: block;
+}
+
+ddn-sticky-wrapper {
+
+}
+
+ddn-sticky-wrapper>ddn-sticky {
+  transition: top 0.5s;
+  z-index: 0;
+}
+
+ddn-sticky-wrapper>ddn-sticky.fixed {
+  position: absolute;
+  width: 100%;
+  background: white;
+  z-index: 1;
+  border-top: 1px solid #EFEFEF;
+}
+
+ddn-sticky-wrapper>ddn-sticky.absolute {
+  position: absolute;
+  background: white;
+  z-index: 1;
+  border-top: 1px solid #EFEFEF;
+}
+
+ddn-sticky-wrapper>ddn-sticky.fixed2 {
+  position: fixed;
+  background: white;
+  z-index: 1;
+  border-top: 1px solid #EFEFEF;
+}
+
+@media (min-width:768px){
+  body,html{
+    overflow: hidden;
+    height: 100vh;
+  }
 }

@@ -2,7 +2,11 @@
   <div class="row fullHeight">
     <div class="col-md-4 flex">
     <div class="filtersContainer">
-      <h3 class="mainTitle">GoGoGo</h3>
+      <div class="mainTitle">
+        <a href="#/home">
+          <img src="images/logo.svg" />
+        </a>
+      </div>
       <div class="row search">
         <div class="col-md-6">
           <input
@@ -62,9 +66,14 @@
       </div>
   </div>
       <div class="routesContainer">
-      <div ng-repeat="team in teams | filter: { key: filters.selectedTeam } | routes:filters ">
-        <div ng-if="team.shown">
-          <h3 class="teamNumber">{{team.key}}</h3>
+      <div ng-if="team.shown" ng-repeat="team in teams | filter: { key: filters.selectedTeam } | routes:filters ">
+        <!-- <div ng-if="team.shown"> -->
+          <ddn-sticky-wrapper>
+            <p class="clearfix teamHeader">
+              <span class="teamNumber pull-left">TEAM {{team.key}}</span>
+              <span class="teamRoutes pull-right">{{ team.values.length}} route{{team.values.length>1?'s':''}}</span>
+            </p>
+          </ddn-sticky-wrapper>
           <div class="media"
             ng-class="{'mediaActive':route.properties.id == singleRoute.features[0].properties.id}"
             ng-attr-id="{{ route.properties.id }}"
@@ -73,38 +82,37 @@
             ng-click="getSingleRoute(team.key, route.properties.id)">
 
             <div class="media-body">
-            <h6 class="routeNumber">route {{$index+1}}</h6>
+            <p>
+              {{route.properties.startDatetime | date:'MMM d, y'}} at {{route.properties.startDatetime | date:'HH:mm:ss'}}
+            </p>
             <p>
               <span ng-class="{walking:'icon-Converse', bike:'icon-Bike-1'}[route.properties.tm]" aria-hidden="true"></span>
               <span class="routeInfo">{{route.properties.distance}}</span>km in <span class="routeInfo">{{(route.properties.endDatetime-route.properties.startDatetime) | date:'HH:mm:ss':'+000'}}</span>
             </p>
-            <p>
-              Started on {{route.properties.startDatetime | date:'MMM d, y'}} at {{route.properties.startDatetime | date:'HH:mm:ss'}} and arrived at {{route.properties.endDatetime | date:'HH:mm:ss'}}
-            </p>
+            </div>
+            <div class="media-right">
+              <div minimap route="route"></div>
+            </div>
             <div class="singleRoute" ng-if="singleRoute && route.properties.id == singleRoute.features[0].properties.id">
               <ul>
                 <li>
-                  START
+                  START <span class="emoStep">{{route.properties.startDatetime | date:'EEEE HH:mm:ss'}}</span>
                 </li>
                 <li ng-repeat="line in singleRoute.features">
                   <i class="em"
                    ng-mouseover="setCenter(line.geometry.coordinates[0], line.properties.emotion)"
                   ng-class="{1:'em-tired_face', 2:'em-worried',3:'em-neutral_face',4:'em-blush',5:'em-smile'}[line.properties.emotion]">
-                  </i> {{ line.properties.startDatetime | date:'HH:mm:ss' }}
+                </i> {{(route.properties.endDatetime-route.properties.startDatetime)-(route.properties.endDatetime-line.properties.startDatetime) | date:'HH:mm:ss':'+000'}}
                   <br />
                   <div class="emoLine" ng-class="{1:'tired_face', 2:'worried',3:'neutral_face',4:'blush',5:'smile'}[line.properties.emotion]"></div>
                 </li>
                 <li>
-                  END
+                  END <span class="emoStep">{{route.properties.endDatetime | date:'EEEE HH:mm:ss'}}</span>
                 </li>
               </ul>
             </div>
-            </div>
-            <div class="media-right">
-              <div minimap route="route"></div>
-            </div>
           </div>
-        </div>
+        <!-- </div> shown -->
       </div>
     </div>
   </div>
