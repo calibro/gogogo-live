@@ -105,4 +105,5 @@ angular.module('gogogoApp')
         },function(error){
           $scope.errors = error;
         })
+
   });
