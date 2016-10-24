@@ -66,7 +66,7 @@
       </div>
   </div>
       <div class="routesContainer">
-      <div ng-if="team.shown" ng-repeat="team in teams | filter: { key: filters.selectedTeam } | routes:filters ">
+      <div ng-if="team.shown" ng-repeat="team in teams | filter:{key: filters.selectedTeam}:true | routes:filters ">
         <!-- <div ng-if="team.shown"> -->
           <ddn-sticky-wrapper>
             <p class="clearfix teamHeader">

@@ -17,7 +17,7 @@ angular.module('gogogoApp')
     $scope.filters = {
       bike: true,
       walking: true,
-      selectedTeam: '',
+      selectedTeam: undefined,
       minValue:'',
       maxValue:''
     };
@@ -57,7 +57,7 @@ angular.module('gogogoApp')
     }
 
     $scope.removeTeam = function(){
-      $scope.filters.selectedTeam = '';
+      $scope.filters.selectedTeam = undefined;
       $scope.removeSingleTeam();
     }
 

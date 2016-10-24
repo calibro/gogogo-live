@@ -49,8 +49,6 @@ angular.module('gogogoApp')
       out.dates[1] = d3.timeMinute.ceil(new Date(out.dates[1])).getTime();
       out.dates[0] = d3.timeMinute.floor(new Date(out.dates[0])).getTime();
 
-      console.log(teams)
-
       return out;
 
     };

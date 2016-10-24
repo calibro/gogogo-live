@@ -98,7 +98,7 @@ angular.module('gogogoApp')
               if (featuresTeam.length) {
                   map.setFilter("singleteam", ["==", "id", featuresTeam[0].properties.id]);
               } else {
-
+                if(map.getLayoutProperty('singleteam', 'visibility') == 'visible'){
                   var methods = ['in','tm'];
                   if(scope.filters.bike){
                     methods.push('bike')
@@ -115,6 +115,7 @@ angular.module('gogogoApp')
                     ['>', 'startDatetime', scope.filters.minValue],
                     ['<', 'endDatetime', scope.filters.maxValue]
                   ]);
+                }
               }
             }
           });
