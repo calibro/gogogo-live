@@ -11,6 +11,7 @@ angular.module('gogogoApp')
   .controller('ExploreCtrl', function ($scope, apiservice) {
     $scope.routes,
     $scope.singleRoute,
+    $scope.singleTeam,
     $scope.teams,
     $scope.errors;
     $scope.filters = {
@@ -50,16 +51,22 @@ angular.module('gogogoApp')
 
     $scope.onSelectedTeam = function(item, model, label, event){
       $scope.removeSingleRoute();
-      $scope.searchTeam = ''
+      $scope.searchTeam = '';
       $scope.filters.selectedTeam = item;
+      $scope.getSingleTeam(item);
     }
 
     $scope.removeTeam = function(){
       $scope.filters.selectedTeam = '';
+      $scope.removeSingleTeam();
     }
 
     $scope.removeSingleRoute = function() {
       $scope.singleRoute = null;
+    }
+
+    $scope.removeSingleTeam = function() {
+      $scope.singleTeam = null;
     }
 
     $scope.getSingleRoute = function(teamid, routeid){
@@ -73,6 +80,15 @@ angular.module('gogogoApp')
       }else{
         $scope.removeSingleRoute();
       }
+    }
+
+    $scope.getSingleTeam = function(teamid){
+        apiservice.getSingleTeam(teamid)
+          .then(function(data){
+            $scope.singleTeam = data;
+          },function(error){
+            $scope.errors = error;
+          });
     }
 
     apiservice.getRoutes()

@@ -18,7 +18,7 @@ angular.module('gogogoApp')
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v9',
             center: [4.9000,52.3667],
-            minZoom:12,
+            // minZoom:12,
             maxZoom:17,
             zoom: 13
         });
@@ -80,6 +80,7 @@ angular.module('gogogoApp')
 
 
           map.on('mousemove', function (e) {
+            //all routes
               var features = map.queryRenderedFeatures(e.point, { layers: ['routes'] });
               map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
               if (features.length) {
@@ -89,12 +90,28 @@ angular.module('gogogoApp')
                   map.setFilter("routes-hover", ["==", "id", ""]);
                   map.setFilter("routes-hover-in", ["==", "id", ""]);
               }
+            //single team
+            if(map.getSource('singleteam')){
+              var featuresTeam = map.queryRenderedFeatures(e.point, { layers: ['singleteam'] });
+              map.getCanvas().style.cursor = (featuresTeam.length) ? 'pointer' : '';
+              if (featuresTeam.length) {
+                  map.setFilter("singleteam", ["==", "id", featuresTeam[0].properties.id]);
+              } else {
+                  map.setFilter("singleteam", ['all']);
+              }
+            }
           });
 
           map.on('click', function (e) {
-              var visibility = map.getLayoutProperty('routes', 'visibility');
+              var visibilityRoute = map.getLayoutProperty('routes', 'visibility');
 
-              if (visibility != 'visible') {
+              if(scope.filters.selectedTeam){
+                map.setLayoutProperty('singleteam', 'visibility', 'visible');
+                scope.removeSingleRoute();
+                if(!scope.$$phase) {
+                  scope.$apply()
+                }
+              }else if (!scope.filters.selectedTeam && visibilityRoute != 'visible') {
                   scope.removeSingleRoute();
                   if(!scope.$$phase) {
                     scope.$apply()
@@ -104,20 +121,37 @@ angular.module('gogogoApp')
               var features = map.queryRenderedFeatures(e.point, { layers: ['routes-hover'] });
               //var features = map.queryRenderedFeatures(e.point, { layers: ['routes'] });
 
-              if (!features.length) {
-                  return;
+              if (features.length){
+                var feature = features[0];
+
+                scope.getSingleRoute(feature.properties.teamid, feature.properties.id);
+
+                var container = $('.routesContainer'),
+                    scrollTo = $('#'+feature.properties.id);
+
+                container.animate({
+                    scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop() - $('ddn-sticky-wrapper').height()
+                });
               }
 
-              var feature = features[0];
+              if(scope.filters.selectedTeam){
+                var featuresTeam = map.queryRenderedFeatures(e.point, { layers: ['singleteam'] });
 
-              scope.getSingleRoute(feature.properties.teamid, feature.properties.id);
+                if (!featuresTeam.length) {
+                    return;
+                }else{
+                  var featuresTeam = featuresTeam[0];
 
-              var container = $('.routesContainer'),
-                  scrollTo = $('#'+feature.properties.id);
+                  scope.getSingleRoute(featuresTeam.properties.teamid, featuresTeam.properties.id);
 
-              container.animate({
-                  scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop() - $('ddn-sticky-wrapper').height()
-              });
+                  var container = $('.routesContainer'),
+                      scrollTo = $('#'+featuresTeam.properties.id);
+
+                  container.animate({
+                      scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop() - $('ddn-sticky-wrapper').height()
+                  });
+                }
+              }
 
           });
 
@@ -142,6 +176,9 @@ angular.module('gogogoApp')
         map.setLayoutProperty('routes', 'visibility', 'none');
         map.setLayoutProperty('routes-hover', 'visibility', 'none');
         map.setLayoutProperty('routes-hover-in', 'visibility', 'none');
+        if(map.getSource('singleteam')){
+          map.setLayoutProperty('singleteam', 'visibility', 'none');
+        }
         if(map.getSource('emotion')){
           map.setLayoutProperty('emotion', 'visibility', 'none');
           map.setLayoutProperty('emotion-bg', 'visibility', 'none');
@@ -233,6 +270,75 @@ angular.module('gogogoApp')
 
       }
 
+      var updateTeam = function(data){
+
+        map.setLayoutProperty('routes', 'visibility', 'none');
+        map.setLayoutProperty('routes-hover', 'visibility', 'none');
+        map.setLayoutProperty('routes-hover-in', 'visibility', 'none');
+        if(map.getSource('emotion')){
+          map.setLayoutProperty('emotion', 'visibility', 'none');
+          map.setLayoutProperty('emotion-bg', 'visibility', 'none');
+        }
+
+        var singleTeamSource = map.getSource('singleteam');
+
+        if(!singleTeamSource){
+          map.addSource("singleteam", {
+              "type": "geojson",
+              "data": data
+          })
+
+          map.addLayer({
+              "id": "singleteam",
+              "type": "line",
+              "source": "singleteam",
+              "layout": {
+                  "line-join": "round",
+                  "line-cap": "round"
+              },
+              "paint": {
+                  "line-color":{
+                      property: 'emotion',
+                      type: 'categorical',
+                      stops: [
+                          ['1', '#d7191c'],
+                          ['2', '#fdae61'],
+                          ['3', '#ffffbf'],
+                          ['4', '#a6d96a'],
+                          ['5', '#1a9641']]
+                  },
+                  "line-width": 3
+              }
+          });
+
+          var bbox = turf.bbox(data);
+
+          map.fitBounds([[
+                bbox[0],
+                bbox[1]
+            ], [
+                bbox[2],
+                bbox[3]
+            ]],{padding:100});
+
+        }else {
+          map.setLayoutProperty('singleteam', 'visibility', 'visible');
+          //map.setLayoutProperty('startend', 'visibility', 'visible');
+          //map.getSource('startend').setData(startEnd)
+          singleTeamSource.setData(data);
+          var bbox = turf.bbox(data);
+
+          map.fitBounds([[
+                bbox[0],
+                bbox[1]
+            ], [
+                bbox[2],
+                bbox[3]
+            ]],{padding:100});
+        }
+
+      }
+
   		scope.$watch('routes.features.length', function(newValue, oldValue){
             if(newValue != oldValue && newValue){
               if(map.loaded()){
@@ -302,9 +408,15 @@ angular.module('gogogoApp')
                 })
               }
             }else if(newValue != oldValue && !newValue){
-              map.setLayoutProperty('routes', 'visibility', 'visible');
-              map.setLayoutProperty('routes-hover', 'visibility', 'visible');
-              map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
+
+              if(!scope.filters.selectedTeam){
+                map.setLayoutProperty('routes', 'visibility', 'visible');
+                map.setLayoutProperty('routes-hover', 'visibility', 'visible');
+                map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
+              }else if(map.getSource('singleteam')){
+                map.setLayoutProperty('singleteam', 'visibility', 'visible');
+              }
+
               map.setLayoutProperty('singleroute', 'visibility', 'none');
               map.setLayoutProperty('startend', 'visibility', 'none');
               if(map.getSource('emotion')){
@@ -314,6 +426,29 @@ angular.module('gogogoApp')
 
             }//end if change
           })
+
+        scope.$watch('singleTeam.features.length', function(newValue, oldValue){
+              if(newValue != oldValue && newValue){
+                if(map.loaded()){
+                  updateTeam(scope.singleTeam);
+                }else{
+                  map.on('load', function () {
+                    updateTeam(scope.singleTeam);
+                  })
+                }
+              }else if(newValue != oldValue && !newValue){
+                map.setLayoutProperty('routes', 'visibility', 'visible');
+                map.setLayoutProperty('routes-hover', 'visibility', 'visible');
+                map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
+                map.setLayoutProperty('singleteam', 'visibility', 'none');
+                // map.setLayoutProperty('startend', 'visibility', 'none');
+                // if(map.getSource('emotion')){
+                //   map.setLayoutProperty('emotion', 'visibility', 'none');
+                //   map.setLayoutProperty('emotion-bg', 'visibility', 'none');
+                // }
+
+              }//end if change
+            })
 
       scope.$watchGroup(['filters.bike', 'filters.walking','filters.selectedTeam','filters.minValue','filters.maxValue'], function(newValues, oldValues, scope) {
 

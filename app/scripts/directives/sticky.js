@@ -31,7 +31,7 @@ angular.module('gogogoApp')
           if (pos <= angular.element('.routesContainer').scrollTop()) {
             var $next = stickies[index + 1],
                 next = $next ? $next[0] : null,
-                npos = $next.data('pos');
+                npos = next?$next.data('pos'):0;
 
             // $sticky.addClass("fixed");
             // $sticky.css('top', angular.element('.routesContainer').scrollTop()+'px');
