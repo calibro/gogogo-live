@@ -18,11 +18,12 @@ angular.module('gogogoApp')
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v9',
             center: [4.9000,52.3667],
-            // minZoom:12,
+            minZoom:8,
             maxZoom:17,
             zoom: 13
         });
 
+        var emotionMarker;
 
         map.addControl(new mapboxgl.NavigationControl());
 
@@ -97,7 +98,23 @@ angular.module('gogogoApp')
               if (featuresTeam.length) {
                   map.setFilter("singleteam", ["==", "id", featuresTeam[0].properties.id]);
               } else {
-                  map.setFilter("singleteam", ['all']);
+
+                  var methods = ['in','tm'];
+                  if(scope.filters.bike){
+                    methods.push('bike')
+                  }
+
+                  if(scope.filters.walking){
+                    methods.push('walking')
+                  }
+
+                  map.setFilter('singleteam',[
+                    'all',
+                    methods,
+                    ['==', 'teamid', scope.filters.selectedTeam],
+                    ['>', 'startDatetime', scope.filters.minValue],
+                    ['<', 'endDatetime', scope.filters.maxValue]
+                  ]);
               }
             }
           });
@@ -179,9 +196,8 @@ angular.module('gogogoApp')
         if(map.getSource('singleteam')){
           map.setLayoutProperty('singleteam', 'visibility', 'none');
         }
-        if(map.getSource('emotion')){
-          map.setLayoutProperty('emotion', 'visibility', 'none');
-          map.setLayoutProperty('emotion-bg', 'visibility', 'none');
+        if(emotionMarker){
+          emotionMarker.remove()
         }
 
         var startPoint = data.features[0].geometry.coordinates[0],
@@ -275,9 +291,8 @@ angular.module('gogogoApp')
         map.setLayoutProperty('routes', 'visibility', 'none');
         map.setLayoutProperty('routes-hover', 'visibility', 'none');
         map.setLayoutProperty('routes-hover-in', 'visibility', 'none');
-        if(map.getSource('emotion')){
-          map.setLayoutProperty('emotion', 'visibility', 'none');
-          map.setLayoutProperty('emotion-bg', 'visibility', 'none');
+        if(emotionMarker){
+          emotionMarker.remove()
         }
 
         var singleTeamSource = map.getSource('singleteam');
@@ -353,45 +368,38 @@ angular.module('gogogoApp')
 
       scope.$watch('mapCenter', function(newValue, oldValue){
             if(newValue != oldValue && newValue){
-              var emotion = map.getSource('emotion')
-              if(!emotion){
-                map.addSource("emotion", {
-                    "type": "geojson",
-                    "data": turf.point(newValue.center, {emotion:newValue.emotion})
-                })
-                map.addLayer({
-                    "id": "emotion-bg",
-                    "type": "circle",
-                    "source": "emotion",
-                    "paint": {
-                        "circle-radius": 7
-                    }
-                });
 
-                map.addLayer({
-                    "id": "emotion",
-                    "type": "circle",
-                    "source": "emotion",
-                    "paint": {
-                        "circle-color":{
-                            property: 'emotion',
-                            type: 'categorical',
-                            stops: [
-                                ['1', '#d7191c'],
-                                ['2', '#fdae61'],
-                                ['3', '#ffffbf'],
-                                ['4', '#a6d96a'],
-                                ['5', '#1a9641']]
-                        },
-                        "circle-radius": 5
-                    }
-                });
-              }else{
-                map.setLayoutProperty('emotion', 'visibility', 'visible');
-                map.setLayoutProperty('emotion-bg', 'visibility', 'visible');
-                emotion.setData(turf.point(newValue.center, {emotion:newValue.emotion}))
+              if(emotionMarker){
+                emotionMarker.remove();
               }
+              var el = d3.select('body').append('div');
 
+              el.append('i')
+                .attr("class", function(){
+                  var icon;
+                  switch (newValue.emotion) {
+                      case '1':
+                          icon = "em-tired_face";
+                          break;
+                      case '2':
+                          icon = "em-worried";
+                          break;
+                      case '3':
+                          icon = "em-neutral_face";
+                          break;
+                      case '4':
+                          icon = "em-blush";
+                          break;
+                      case '5':
+                          icon = "em-smile";
+                  }
+                  return 'em ' + icon;
+                })
+
+
+              emotionMarker = new mapboxgl.Marker(el.node(),{'offset':[-9,-9]})
+              	.setLngLat(newValue.center)
+                .addTo(map);
 
               map.flyTo({center: newValue.center, zoom: 17});
 
@@ -419,9 +427,8 @@ angular.module('gogogoApp')
 
               map.setLayoutProperty('singleroute', 'visibility', 'none');
               map.setLayoutProperty('startend', 'visibility', 'none');
-              if(map.getSource('emotion')){
-                map.setLayoutProperty('emotion', 'visibility', 'none');
-                map.setLayoutProperty('emotion-bg', 'visibility', 'none');
+              if(emotionMarker){
+                emotionMarker.remove();
               }
 
             }//end if change
@@ -465,9 +472,9 @@ angular.module('gogogoApp')
           }
 
           if(newValues[2]){
-            map.setLayoutProperty('routes', 'visibility', 'visible');
-            map.setLayoutProperty('routes-hover', 'visibility', 'visible');
-            map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
+            // map.setLayoutProperty('routes', 'visibility', 'visible');
+            // map.setLayoutProperty('routes-hover', 'visibility', 'visible');
+            // map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
             map.setFilter('routes',[
               'all',
               methods,
@@ -475,6 +482,16 @@ angular.module('gogogoApp')
               ['>', 'startDatetime', newValues[3]],
               ['<', 'endDatetime', newValues[4]]
             ]);
+
+            if(map.getSource('singleteam')){
+              map.setFilter('singleteam',[
+                'all',
+                methods,
+                ['==', 'teamid', newValues[2]],
+                ['>', 'startDatetime', newValues[3]],
+                ['<', 'endDatetime', newValues[4]]
+              ]);
+            }
 
           }else{
             map.setLayoutProperty('routes', 'visibility', 'visible');

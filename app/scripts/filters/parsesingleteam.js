@@ -17,13 +17,14 @@ angular.module('gogogoApp')
         var id = e._id;
         var teamid = e.teamid;
         var tm = e.transport_method;
-        var startDatetime;
+        var startDatetime = e.startDatetime;
+        var endDatetime = e.endDatetime;
         var emotion;
         var routeEmotion = [];
         route.forEach(function(d,i){
           if(d.coordinates.emotion != emotion){
             if(routeEmotion.length){
-              var lineString = turf.lineString(routeEmotion, {emotion:emotion, id: id, teamid: teamid, tm: tm,startDatetime: startDatetime});
+              var lineString = turf.lineString(routeEmotion, {emotion:emotion, id: id, teamid: teamid, tm: tm,startDatetime: startDatetime, endDatetime:endDatetime});
               routes.push(lineString)
               startDatetime = Math.round(+d.timestamp)
               routeEmotion = [routeEmotion[routeEmotion.length-1]]
@@ -37,7 +38,7 @@ angular.module('gogogoApp')
             routeEmotion.push([+d.coordinates.longitude,+d.coordinates.latitude])
           }
           if(i == route.length-1){
-            var lineString = turf.lineString(routeEmotion, {emotion:emotion, id: id, teamid: teamid, tm: tm,startDatetime: startDatetime});
+            var lineString = turf.lineString(routeEmotion, {emotion:emotion, id: id, teamid: teamid, tm: tm,startDatetime: startDatetime,endDatetime:endDatetime});
             routes.push(lineString)
           }
         })
