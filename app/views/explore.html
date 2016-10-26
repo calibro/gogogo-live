@@ -88,6 +88,12 @@
             <p>
               <span ng-class="{walking:'icon-Converse', bike:'icon-Bike-1'}[route.properties.tm]" aria-hidden="true"></span>
               <span class="routeInfo">{{route.properties.distance}}</span>km in <span class="routeInfo">{{(route.properties.endDatetime-route.properties.startDatetime) | date:'HH:mm:ss':'+000'}}</span>
+              <span class="meanRoute">
+                <i class="em"
+                  ng-if="singleTeamAvg && route.properties.id == singleRoute.features[0].properties.id"
+                  ng-class="{1:'em-tired_face', 2:'em-worried',3:'em-neutral_face',4:'em-blush',5:'em-smile'}[singleTeamAvg]">
+              </i>
+              </span>
             </p>
             </div>
             <div class="media-right">

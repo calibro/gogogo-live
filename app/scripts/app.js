@@ -36,6 +36,11 @@ angular
       .when('/', {
         redirectTo: '/home'
       })
+      .when('/all', {
+        templateUrl: 'views/all.html',
+        controller: 'AllCtrl',
+        controllerAs: 'all'
+      })
       .otherwise({
         redirectTo: '/home'
       });

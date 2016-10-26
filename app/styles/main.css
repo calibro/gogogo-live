@@ -367,6 +367,10 @@ svg .tick line{
   border-left-color: #1a9641;
 }
 
+.meanRoute .em{
+  margin-bottom: 9px;
+}
+
 ddn-sticky-wrapper,
 ddn-sticky {
   display: block;

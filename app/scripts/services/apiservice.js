@@ -63,6 +63,23 @@ angular.module('gogogoApp')
        });
 
        return deferred.promise;
+     },
+     getRoutesAll : function(){
+       var deferred = $q.defer();
+       var serviceUrl = '/getfulldataapp';
+       var endPointUrl = serviceUrl;
+
+       $http({
+          method: 'GET',
+          cache: false,
+          url : BASE_API_URL + endPointUrl,
+        }).success(function(data){
+         deferred.resolve(parseSingleTeamFilter(data));
+       }).error(function(){
+         deferred.reject('An error occured while fetching data');
+       });
+
+       return deferred.promise;
      }
     };
   });

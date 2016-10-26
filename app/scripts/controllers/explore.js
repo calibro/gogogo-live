@@ -12,6 +12,7 @@ angular.module('gogogoApp')
     $scope.routes,
     $scope.singleRoute,
     $scope.singleTeam,
+    $scope.singleTeamAvg,
     $scope.teams,
     $scope.errors;
     $scope.filters = {
@@ -58,6 +59,7 @@ angular.module('gogogoApp')
 
     $scope.removeTeam = function(){
       $scope.filters.selectedTeam = undefined;
+      $scope.singleTeamAvg = undefined;
       $scope.removeSingleTeam();
     }
 
@@ -74,6 +76,10 @@ angular.module('gogogoApp')
         apiservice.getSingleRoute(teamid, routeid)
           .then(function(data){
             $scope.singleRoute = data;
+            $scope.singleTeamAvg = d3.mean(data.features, function(d){
+              return +d.properties.emotion;
+            })
+            $scope.singleTeamAvg = Math.round($scope.singleTeamAvg);
           },function(error){
             $scope.errors = error;
           });

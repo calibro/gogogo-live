@@ -437,13 +437,13 @@ angular.module('gogogoApp')
 
         scope.$watch('singleTeam.features.length', function(newValue, oldValue){
               if(newValue != oldValue && newValue){
-                if(map.loaded()){
-                  updateTeam(scope.singleTeam);
-                }else{
-                  map.on('load', function () {
+                //if(map.loaded()){
+                  //updateTeam(scope.singleTeam);
+                //}else{
+                  //map.on('load', function () {
                     updateTeam(scope.singleTeam);
-                  })
-                }
+                  //})
+                //}
               }else if(newValue != oldValue && !newValue){
                 map.setLayoutProperty('routes', 'visibility', 'visible');
                 map.setLayoutProperty('routes-hover', 'visibility', 'visible');
