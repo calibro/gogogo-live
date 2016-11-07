@@ -1,0 +1,57 @@
+<div class="container-fluid fullHeight">
+  <div class="row fullHeight">
+      <div class="col-md-4 flex">
+      <div class="filtersContainer">
+        <div class="mainTitle">
+          <a href="#/home">
+            <img src="images/logo.svg" />
+          </a>
+        </div>
+       </div>
+       <div class="reportsContainer">
+           <div class="media" ng-class="{'mediaActive': checkReport('all')}" ng-click="reportType = 'all'">
+              <div class="media-body">
+              <p>
+                <span class="routeInfo">All routes with emotions</span>
+              </p>
+              <p>
+                {{totalRoutes}} routes - {{totalTeams}} teams
+              </p>
+              </div>
+              <div class="media-right">
+                <span class="glyphicon glyphicon-menu-right"></span>
+              </div>
+           </div>
+           <div class="media" ng-class="{'mediaActive': checkReport('average')}" ng-click="reportType = 'average'">
+              <div class="media-body">
+              <p>
+                <span class="routeInfo">Average emotion per areas</span>
+              </p>
+              <p>
+                30 areas - {{dataPoints | number:0}} data points
+              </p>
+              </div>
+              <div class="media-right">
+                <span class="glyphicon glyphicon-menu-right"></span>
+              </div>
+           </div>
+           <div class="media" ng-class="{'mediaActive': checkReport('poi')}" ng-click="reportType = 'poi'">
+              <div class="media-body">
+              <p>
+                <span class="routeInfo">Point of interests</span>
+              </p>
+              <p>
+                15 POI - 2000 data points
+              </p>
+              </div>
+              <div class="media-right">
+                <span class="glyphicon glyphicon-menu-right"></span>
+              </div>
+           </div>
+      </div>
+    </div>
+    <div class="col-md-8 fullHeight">
+      <div id="map" class="fullHeight" mapall></div>
+    </div>
+  </div>
+</div>

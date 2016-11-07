@@ -7,7 +7,7 @@
  * # mapall
  */
 angular.module('gogogoApp')
-    .directive('mapall', ['$timeout', '$window', function ($timeout, $window){
+    .directive('mapall', ['$timeout', '$window', '$filter',function ($timeout, $window, $filter){
       return {
         restrict: 'A',
         replace: false,
@@ -56,123 +56,100 @@ angular.module('gogogoApp')
                 }
             });
 
-            // map.addLayer({
-            //     "id": "routes-hover",
-            //     "type": "line",
-            //     "source": "routes",
-            //     "layout": {
-            //         "line-join": "round",
-            //         "line-cap": "round"
-            //     },
-            //     "paint": {
-            //         "line-color": "rgba(255,255,255,1)",
-            //         "line-width": 1,
-            //         "line-gap-width":3
-            //     },
-            //     "filter": ["==", "id", ""]
-            // });
-            //
-            // map.addLayer({
-            //     "id": "routes-hover-in",
-            //     "type": "line",
-            //     "source": "routes",
-            //     "layout": {
-            //         "line-join": "round",
-            //         "line-cap": "round"
-            //     },
-            //     "paint": {
-            //         "line-color": "#284347",
-            //         "line-width": 3
-            //     },
-            //     "filter": ["==", "id", ""]
-            // });
+            map.addLayer({
+                "id": "routes-hover",
+                "type": "line",
+                "source": "routes",
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round"
+                },
+                "paint": {
+                    "line-color": "rgba(255,255,255,1)",
+                    "line-width": 1,
+                    "line-gap-width":4
+                },
+                "filter": ["==", "chunkid", ""]
+            });
 
-
+            map.addLayer({
+                "id": "routes-hover-in",
+                "type": "line",
+                "source": "routes",
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round"
+                },
+                "paint": {
+                  "line-color":{
+                      property: 'emotion',
+                      type: 'categorical',
+                      stops: [
+                          ['1', 'rgba(215, 25, 28,1)'],
+                          ['2', 'rgba(253, 174, 97,1)'],
+                          ['3', 'rgba(255, 255, 191,1)'],
+                          ['4', 'rgba(166, 217, 106,1)'],
+                          ['5', 'rgba(26, 150, 65,1)']]
+                  },
+                  "line-width": 4
+                },
+                "filter": ["==", "chunkid", ""]
+            });
 
             map.on('mousemove', function (e) {
-              //all routes
-                // var features = map.queryRenderedFeatures(e.point, { layers: ['routes'] });
-                // map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
-                // if (features.length) {
-                //     map.setFilter("routes-hover", ["==", "id", features[0].properties.id]);
-                //     map.setFilter("routes-hover-in", ["==", "id", features[0].properties.id]);
-                // } else {
-                //     map.setFilter("routes-hover", ["==", "id", ""]);
-                //     map.setFilter("routes-hover-in", ["==", "id", ""]);
-                // }
-              //single team
               if(map.getSource('routes')){
-                var featuresTeam = map.queryRenderedFeatures(e.point, { layers: ['routes'] });
-                //map.getCanvas().style.cursor = (featuresTeam.length) ? 'pointer' : '';
-                if (featuresTeam.length) {
-                    map.setFilter("routes", ["==", "id", featuresTeam[0].properties.id]);
-                } else {
-                  //if(map.getLayoutProperty('routes', 'visibility') == 'visible'){
-
-                    map.setFilter('routes',['all']);
-                  //}
-                }
+                var features = map.queryRenderedFeatures(e.point, { layers: ['routes'] });
+                map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
               }
             });
 
-            // map.on('click', function (e) {
-            //     var visibilityRoute = map.getLayoutProperty('routes', 'visibility');
-            //
-            //     if(scope.filters.selectedTeam){
-            //       map.setLayoutProperty('singleteam', 'visibility', 'visible');
-            //       scope.removeSingleRoute();
-            //       if(!scope.$$phase) {
-            //         scope.$apply()
-            //       }
-            //     }else if (!scope.filters.selectedTeam && visibilityRoute != 'visible') {
-            //         scope.removeSingleRoute();
-            //         if(!scope.$$phase) {
-            //           scope.$apply()
-            //         }
-            //     }
-            //
-            //     var features = map.queryRenderedFeatures(e.point, { layers: ['routes-hover'] });
-            //     //var features = map.queryRenderedFeatures(e.point, { layers: ['routes'] });
-            //
-            //     if (features.length){
-            //       var feature = features[0];
-            //
-            //       scope.getSingleRoute(feature.properties.teamid, feature.properties.id);
-            //
-            //       var container = $('.routesContainer'),
-            //           scrollTo = $('#'+feature.properties.id);
-            //
-            //       container.animate({
-            //           scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop() - $('ddn-sticky-wrapper').height()
-            //       });
-            //     }
-            //
-            //     if(scope.filters.selectedTeam){
-            //       var featuresTeam = map.queryRenderedFeatures(e.point, { layers: ['singleteam'] });
-            //
-            //       if (!featuresTeam.length) {
-            //           return;
-            //       }else{
-            //         var featuresTeam = featuresTeam[0];
-            //
-            //         scope.getSingleRoute(featuresTeam.properties.teamid, featuresTeam.properties.id);
-            //
-            //         var container = $('.routesContainer'),
-            //             scrollTo = $('#'+featuresTeam.properties.id);
-            //
-            //         container.animate({
-            //             scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop() - $('ddn-sticky-wrapper').height()
-            //         });
-            //       }
-            //     }
-            //
-            // });
+            map.on('click', function (e) {
+              var features = map.queryRenderedFeatures(e.point, { layers: ['routes'] });
 
-            // Reset the route-hover layer's filter when the mouse leaves the map
-            // map.on("mouseout", function() {
-            //     map.setFilter("routes-hover", ["==", "id", ""]);
-            //     map.setFilter("routes-hover-in", ["==", "id", ""]);
-            // });
+              if (features.length) {
+                  map.setFilter("routes-hover-in", ["==", "chunkid", features[0].properties.chunkid]);
+                  map.setFilter("routes-hover", ["==", "chunkid", features[0].properties.chunkid]);
+              } else {
+                  map.setFilter("routes-hover-in", ["==", "chunkid", ""]);
+                  map.setFilter("routes-hover", ["==", "chunkid", ""]);
+                  return;
+              }
+
+              var feature = features[0];
+              var color;
+              switch (feature.properties.emotion) {
+                  case '1':
+                      color = "#d7191c";
+                      break;
+                  case '2':
+                      color = "#fdae61";
+                      break;
+                  case '3':
+                      color = "#c7c732";
+                      break;
+                  case '4':
+                      color = "#a6d96a";
+                      break;
+                  case '5':
+                      color = "#1a9641";
+              }
+
+              var distance = Math.round(turf.lineDistance(feature)*100)/100;
+              var date = $filter('date')(feature.properties.startDatetime, "MMM d, y") + ' at ' + $filter('date')(feature.properties.startDatetime, "HH:mm:ss");
+              var text = '<span class="popupTitle">' +
+                          feature.properties.teamid +
+                          '</span><br><span class="popupSubTitle">' +
+                          '<span style="color:' + color +';">' + distance + ' km </span>' +
+                          'by ' +
+                          feature.properties.tm +'<br>on '+
+                           date +'</span>';
+
+
+              var popup = new mapboxgl.Popup()
+                  .setLngLat(map.unproject(e.point))
+                  .setHTML(text)
+                  .addTo(map);
+            });
 
             var bbox = turf.bbox(data);
 
@@ -185,170 +162,6 @@ angular.module('gogogoApp')
               ]],{padding:100});
           }
 
-        // var updateSingle = function(data){
-        //   map.setLayoutProperty('routes', 'visibility', 'none');
-        //   map.setLayoutProperty('routes-hover', 'visibility', 'none');
-        //   map.setLayoutProperty('routes-hover-in', 'visibility', 'none');
-        //   if(map.getSource('singleteam')){
-        //     map.setLayoutProperty('singleteam', 'visibility', 'none');
-        //   }
-        //   if(emotionMarker){
-        //     emotionMarker.remove()
-        //   }
-        //
-        //   var startPoint = data.features[0].geometry.coordinates[0],
-        //       endPoint = data.features[data.features.length-1].geometry.coordinates[data.features[data.features.length-1].geometry.coordinates.length-1];
-        //
-        //   var startEnd = turf.featureCollection([
-        //     turf.point(startPoint, {label:'start'}),
-        //     turf.point(endPoint, {label:'end'})
-        //   ])
-        //
-        //   var singleRouteSource = map.getSource('singleroute');
-        //
-        //   if(!singleRouteSource){
-        //     map.addSource("singleroute", {
-        //         "type": "geojson",
-        //         "data": data
-        //     })
-        //
-        //     map.addSource("startend", {
-        //         "type": "geojson",
-        //         "data": startEnd
-        //     })
-        //
-        //     map.addLayer({
-        //         "id": "singleroute",
-        //         "type": "line",
-        //         "source": "singleroute",
-        //         "layout": {
-        //             "line-join": "round",
-        //             "line-cap": "round"
-        //         },
-        //         "paint": {
-        //             "line-color":{
-        //                 property: 'emotion',
-        //                 type: 'categorical',
-        //                 stops: [
-        //                     ['1', '#d7191c'],
-        //                     ['2', '#fdae61'],
-        //                     ['3', '#ffffbf'],
-        //                     ['4', '#a6d96a'],
-        //                     ['5', '#1a9641']]
-        //             },
-        //             "line-width": 3
-        //         }
-        //     });
-        //
-        //     map.addLayer({
-        //         "id": "startend",
-        //         "type": "symbol",
-        //         "source": "startend",
-        //         "layout": {
-        //             "text-field": "{label}",
-        //             "text-transform": "uppercase",
-        //             "text-size": 12,
-        //             "text-offset": [0,1],
-        //             'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold']
-        //         }
-        //     });
-        //
-        //
-        //     var bbox = turf.bbox(data);
-        //
-        //     map.fitBounds([[
-        //           bbox[0],
-        //           bbox[1]
-        //       ], [
-        //           bbox[2],
-        //           bbox[3]
-        //       ]],{padding:100});
-        //
-        //   }else {
-        //     map.setLayoutProperty('singleroute', 'visibility', 'visible');
-        //     map.setLayoutProperty('startend', 'visibility', 'visible');
-        //     map.getSource('startend').setData(startEnd)
-        //     singleRouteSource.setData(data);
-        //     var bbox = turf.bbox(data);
-        //
-        //     map.fitBounds([[
-        //           bbox[0],
-        //           bbox[1]
-        //       ], [
-        //           bbox[2],
-        //           bbox[3]
-        //       ]],{padding:100});
-        //   }
-        //
-        // }
-
-        // var updateTeam = function(data){
-        //
-        //   map.setLayoutProperty('routes', 'visibility', 'none');
-        //   map.setLayoutProperty('routes-hover', 'visibility', 'none');
-        //   map.setLayoutProperty('routes-hover-in', 'visibility', 'none');
-        //   if(emotionMarker){
-        //     emotionMarker.remove()
-        //   }
-        //
-        //   var singleTeamSource = map.getSource('singleteam');
-        //
-        //   if(!singleTeamSource){
-        //     map.addSource("singleteam", {
-        //         "type": "geojson",
-        //         "data": data
-        //     })
-        //
-        //     map.addLayer({
-        //         "id": "singleteam",
-        //         "type": "line",
-        //         "source": "singleteam",
-        //         "layout": {
-        //             "line-join": "round",
-        //             "line-cap": "round"
-        //         },
-        //         "paint": {
-        //             "line-color":{
-        //                 property: 'emotion',
-        //                 type: 'categorical',
-        //                 stops: [
-        //                     ['1', '#d7191c'],
-        //                     ['2', '#fdae61'],
-        //                     ['3', '#ffffbf'],
-        //                     ['4', '#a6d96a'],
-        //                     ['5', '#1a9641']]
-        //             },
-        //             "line-width": 3
-        //         }
-        //     });
-        //
-        //     var bbox = turf.bbox(data);
-        //
-        //     map.fitBounds([[
-        //           bbox[0],
-        //           bbox[1]
-        //       ], [
-        //           bbox[2],
-        //           bbox[3]
-        //       ]],{padding:100});
-        //
-        //   }else {
-        //     map.setLayoutProperty('singleteam', 'visibility', 'visible');
-        //     //map.setLayoutProperty('startend', 'visibility', 'visible');
-        //     //map.getSource('startend').setData(startEnd)
-        //     singleTeamSource.setData(data);
-        //     var bbox = turf.bbox(data);
-        //
-        //     map.fitBounds([[
-        //           bbox[0],
-        //           bbox[1]
-        //       ], [
-        //           bbox[2],
-        //           bbox[3]
-        //       ]],{padding:100});
-        //   }
-        //
-        // }
 
     		scope.$watch('routes.features.length', function(newValue, oldValue){
               if(newValue != oldValue && newValue){

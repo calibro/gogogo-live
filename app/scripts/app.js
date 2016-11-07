@@ -36,10 +36,10 @@ angular
       .when('/', {
         redirectTo: '/home'
       })
-      .when('/all', {
-        templateUrl: 'views/all.html',
-        controller: 'AllCtrl',
-        controllerAs: 'all'
+      .when('/report', {
+        templateUrl: 'views/report.html',
+        controller: 'ReportCtrl',
+        controllerAs: 'report'
       })
       .otherwise({
         redirectTo: '/home'

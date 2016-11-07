@@ -45,7 +45,7 @@ body,html{
 }
 
 #map-bg .mapboxgl-canvas-container{
-  opacity: 0.45;
+  opacity: 0.70;
 }
 #map-bg .mapboxgl-ctrl-attrib.mapboxgl-ctrl{
   display: none;
@@ -60,7 +60,7 @@ body,html{
   border-color: white;
   border-width: 2px;
   transition: all 0.5s;
-  margin: 15px 0px 40px 0px;
+  margin: 15px 15px 40px 0px;
 }
 
 .homeExplore span{
@@ -405,6 +405,26 @@ ddn-sticky-wrapper>ddn-sticky.fixed2 {
   background: white;
   z-index: 1;
   border-top: 1px solid #EFEFEF;
+}
+
+.reportsContainer {
+    padding: 0px 0px 20px 0px;
+    margin: 0 -15px;
+}
+
+.reportsContainer .media-right{
+  vertical-align: middle;
+}
+
+.popupTitle{
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'chivo', sans-serif;
+}
+
+.popupSubTitle{
+  font-size: 14px;
+  font-family: 'chivo', sans-serif;
 }
 
 @media (min-width:768px){

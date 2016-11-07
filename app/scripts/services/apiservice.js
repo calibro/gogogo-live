@@ -74,7 +74,7 @@ angular.module('gogogoApp')
           cache: false,
           url : BASE_API_URL + endPointUrl,
         }).success(function(data){
-         deferred.resolve(parseSingleTeamFilter(data));
+         deferred.resolve(data);
        }).error(function(){
          deferred.reject('An error occured while fetching data');
        });

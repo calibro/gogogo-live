@@ -24,7 +24,7 @@ angular.module('gogogoApp')
         route.forEach(function(d,i){
           if(d.coordinates.emotion != emotion){
             if(routeEmotion.length){
-              var lineString = turf.lineString(routeEmotion, {emotion:emotion, id: id, teamid: teamid, tm: tm,startDatetime: startDatetime, endDatetime:endDatetime});
+              var lineString = turf.lineString(routeEmotion, {emotion:emotion, id: id, teamid: teamid, tm: tm,startDatetime: startDatetime, endDatetime:endDatetime, chunkid: id+startDatetime});
               routes.push(lineString)
               startDatetime = Math.round(+d.timestamp)
               routeEmotion = [routeEmotion[routeEmotion.length-1]]
@@ -38,7 +38,7 @@ angular.module('gogogoApp')
             routeEmotion.push([+d.coordinates.longitude,+d.coordinates.latitude])
           }
           if(i == route.length-1){
-            var lineString = turf.lineString(routeEmotion, {emotion:emotion, id: id, teamid: teamid, tm: tm,startDatetime: startDatetime,endDatetime:endDatetime});
+            var lineString = turf.lineString(routeEmotion, {emotion:emotion, id: id, teamid: teamid, tm: tm,startDatetime: startDatetime,endDatetime:endDatetime, chunkid: id+startDatetime});
             routes.push(lineString)
           }
         })
