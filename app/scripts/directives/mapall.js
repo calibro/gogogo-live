@@ -17,13 +17,12 @@ angular.module('gogogoApp')
           var map = new mapboxgl.Map({
               container: 'map',
               style: 'mapbox://styles/mapbox/light-v9',
+              //style: 'mapbox://styles/mapbox/satellite-v9',
               center: [4.9000,52.3667],
               minZoom:8,
               maxZoom:17,
               zoom: 13
           });
-
-          var emotionMarker;
 
           map.addControl(new mapboxgl.NavigationControl());
 
@@ -162,6 +161,91 @@ angular.module('gogogoApp')
               ]],{padding:100});
           }
 
+          var updateGrid = function(data){
+            var popup = new mapboxgl.Popup({
+                  closeButton: false,
+                  closeOnClick: false
+              });
+
+            map.setLayoutProperty('routes', 'visibility', 'none');
+            map.setLayoutProperty('routes-hover', 'visibility', 'none');
+            map.setLayoutProperty('routes-hover-in', 'visibility', 'none');
+
+            map.addSource("grid", {
+                "type": "geojson",
+                "data": data
+            })
+
+            var countExtent = d3.extent(data.features, function(d){
+              return d.properties.count;
+            })
+
+            var heightScale = d3.scaleLinear()
+                .range([10, 500])
+                .domain(countExtent);
+
+            map.addLayer({
+                "id": "grid",
+                "type": "fill",
+                "source": "grid",
+                "paint": {
+                    "fill-opacity": 0.55,
+                    "fill-color":{
+                        property: 'emotions',
+                        type: 'categorical',
+                        stops: [
+                            ['1', 'rgba(215, 25, 28,1)'],
+                            ['2', 'rgba(253, 174, 97,1)'],
+                            ['3', 'rgba(255, 255, 191,1)'],
+                            ['4', 'rgba(166, 217, 106,1)'],
+                            ['5', 'rgba(26, 150, 65,1)']]
+                    },
+                    "fill-extrude-base":0,
+                    "fill-extrude-height":{
+                      "stops": [[countExtent[0],10],[countExtent[1],500]],
+                      "property": "count",
+                      "base": 1
+                    }
+                }
+            });
+
+            // var bbox = turf.bbox(data);
+            //
+            // map.fitBounds([[
+            //       bbox[0],
+            //       bbox[1]
+            //   ], [
+            //       bbox[2],
+            //       bbox[3]
+            //   ]],{padding:100});
+            map.easeTo({pitch:50});
+
+            map.on('mousemove', function (e) {
+              var features = map.queryRenderedFeatures(e.point, { layers: ['grid'] });
+              if (!features.length) {
+                popup.remove();
+                return;
+              }
+
+              var feature = features[0];
+              var emodict = {
+                '1':'em-tired_face',
+                '2':'em-worried',
+                '3':'em-neutral_face',
+                '4':'em-blush',
+                '5':'em-smile'
+              };
+
+              var text = '<span class="popupSubTitle"><b>' +
+                          feature.properties.count +'</b> tracked points<br>'+
+                          'average emotion: <i class="em ' + emodict[feature.properties.emotions] +'"></i></span>';
+
+              popup.setLngLat(map.unproject(e.point)).setHTML(text).addTo(map);
+
+
+            })
+          }
+
 
     		scope.$watch('routes.features.length', function(newValue, oldValue){
               if(newValue != oldValue && newValue){
@@ -175,148 +259,17 @@ angular.module('gogogoApp')
               }//end if change
             })
 
-        // scope.$watch('mapCenter', function(newValue, oldValue){
-        //       if(newValue != oldValue && newValue){
-        //
-        //         if(emotionMarker){
-        //           emotionMarker.remove();
-        //         }
-        //         var el = d3.select('body').append('div');
-        //
-        //         el.append('i')
-        //           .attr("class", function(){
-        //             var icon;
-        //             switch (newValue.emotion) {
-        //                 case '1':
-        //                     icon = "em-tired_face";
-        //                     break;
-        //                 case '2':
-        //                     icon = "em-worried";
-        //                     break;
-        //                 case '3':
-        //                     icon = "em-neutral_face";
-        //                     break;
-        //                 case '4':
-        //                     icon = "em-blush";
-        //                     break;
-        //                 case '5':
-        //                     icon = "em-smile";
-        //             }
-        //             return 'em ' + icon;
-        //           })
-        //
-        //
-        //         emotionMarker = new mapboxgl.Marker(el.node(),{'offset':[-9,-9]})
-        //         	.setLngLat(newValue.center)
-        //           .addTo(map);
-        //
-        //         map.flyTo({center: newValue.center, zoom: 17});
-        //
-        //       }//end if change
-        //     },true)
-
-        // scope.$watch('singleRoute.features.length', function(newValue, oldValue){
-        //       if(newValue != oldValue && newValue){
-        //         if(map.loaded()){
-        //           updateSingle(scope.singleRoute);
-        //         }else{
-        //           map.on('load', function () {
-        //             updateSingle(scope.singleRoute);
-        //           })
-        //         }
-        //       }else if(newValue != oldValue && !newValue){
-        //
-        //         if(!scope.filters.selectedTeam){
-        //           map.setLayoutProperty('routes', 'visibility', 'visible');
-        //           map.setLayoutProperty('routes-hover', 'visibility', 'visible');
-        //           map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
-        //         }else if(map.getSource('singleteam')){
-        //           map.setLayoutProperty('singleteam', 'visibility', 'visible');
-        //         }
-        //
-        //         map.setLayoutProperty('singleroute', 'visibility', 'none');
-        //         map.setLayoutProperty('startend', 'visibility', 'none');
-        //         if(emotionMarker){
-        //           emotionMarker.remove();
-        //         }
-        //
-        //       }//end if change
-        //     })
-
-          // scope.$watch('singleTeam.features.length', function(newValue, oldValue){
-          //       if(newValue != oldValue && newValue){
-          //         //if(map.loaded()){
-          //           //updateTeam(scope.singleTeam);
-          //         //}else{
-          //           //map.on('load', function () {
-          //           console.log("ciao")
-          //             updateTeam(scope.singleTeam);
-          //           //})
-          //         //}
-          //       }else if(newValue != oldValue && !newValue){
-          //         map.setLayoutProperty('routes', 'visibility', 'visible');
-          //         map.setLayoutProperty('routes-hover', 'visibility', 'visible');
-          //         map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
-          //         map.setLayoutProperty('singleteam', 'visibility', 'none');
-          //         // map.setLayoutProperty('startend', 'visibility', 'none');
-          //         // if(map.getSource('emotion')){
-          //         //   map.setLayoutProperty('emotion', 'visibility', 'none');
-          //         //   map.setLayoutProperty('emotion-bg', 'visibility', 'none');
-          //         // }
-          //
-          //       }//end if change
-          //     })
-
-        // scope.$watchGroup(['filters.bike', 'filters.walking','filters.selectedTeam','filters.minValue','filters.maxValue'], function(newValues, oldValues, scope) {
-        //
-        //   if(newValues[3] && newValues[4] && map.getSource('routes')){
-        //     scope.removeSingleRoute();
-        //     var methods = ['in','tm'];
-        //
-        //     if(newValues[0]){
-        //       methods.push('bike')
-        //     }
-        //
-        //     if(newValues[1]){
-        //       methods.push('walking')
-        //     }
-        //
-        //     if(newValues[2]){
-        //       // map.setLayoutProperty('routes', 'visibility', 'visible');
-        //       // map.setLayoutProperty('routes-hover', 'visibility', 'visible');
-        //       // map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
-        //       map.setFilter('routes',[
-        //         'all',
-        //         methods,
-        //         ['==', 'teamid', newValues[2]],
-        //         ['>', 'startDatetime', newValues[3]],
-        //         ['<', 'endDatetime', newValues[4]]
-        //       ]);
-        //
-        //       if(map.getSource('singleteam')){
-        //         map.setFilter('singleteam',[
-        //           'all',
-        //           methods,
-        //           ['==', 'teamid', newValues[2]],
-        //           ['>', 'startDatetime', newValues[3]],
-        //           ['<', 'endDatetime', newValues[4]]
-        //         ]);
-        //       }
-        //
-        //     }else{
-        //       map.setLayoutProperty('routes', 'visibility', 'visible');
-        //       map.setLayoutProperty('routes-hover', 'visibility', 'visible');
-        //       map.setLayoutProperty('routes-hover-in', 'visibility', 'visible');
-        //       map.setFilter('routes',[
-        //         'all',
-        //         methods,
-        //         ['>', 'startDatetime', newValues[3]],
-        //         ['<', 'endDatetime', newValues[4]]
-        //       ]);
-        //     }//end if team
-        //   }//end if change
-        //
-        // });
+        scope.$watch('reportType', function(newValue, oldValue){
+              if(newValue != oldValue && newValue){
+                if(map.loaded()){
+                  updateGrid(scope.gridFeatures);
+                }else{
+                  map.on('load', function () {
+                    updateGrid(scope.gridFeatures);
+                  })
+                }
+              }//end if change
+            })
 
         }
       };

@@ -13,6 +13,16 @@ angular.module('gogogoApp')
     var BASE_API_URL = 'http://149.210.213.121';
 
     return {
+      getFile : function(url){
+        var deferred = $q.defer();
+        $http.get(url).success(function(data){
+          deferred.resolve(data);
+        }).error(function(){
+          deferred.reject("An error occured while fetching file");
+        });
+
+        return deferred.promise;
+      },
      getRoutes : function(teamID, routeID){
        var deferred = $q.defer();
        var serviceUrl = '/getdataapp';
