@@ -162,9 +162,12 @@ angular.module('gogogoApp')
           }
 
           var updateGrid = function(data){
+
             var popup = new mapboxgl.Popup({
                   closeButton: false,
-                  closeOnClick: false
+                  closeOnClick: false,
+                  offset: [10,-10],
+                  anchor: 'bottom-left'
               });
 
             map.setLayoutProperty('routes', 'visibility', 'none');
@@ -209,6 +212,32 @@ angular.module('gogogoApp')
                 }
             });
 
+            map.addLayer({
+                "id": "grid-hover",
+                "type": "fill",
+                "source": "grid",
+                "paint": {
+                    "fill-opacity": 1,
+                    "fill-color":{
+                        property: 'emotions',
+                        type: 'categorical',
+                        stops: [
+                            ['1', 'rgba(215, 25, 28,1)'],
+                            ['2', 'rgba(253, 174, 97,1)'],
+                            ['3', 'rgba(255, 255, 191,1)'],
+                            ['4', 'rgba(166, 217, 106,1)'],
+                            ['5', 'rgba(26, 150, 65,1)']]
+                    },
+                    "fill-extrude-base":0,
+                    "fill-extrude-height":{
+                      "stops": [[countExtent[0],10],[countExtent[1],500]],
+                      "property": "count",
+                      "base": 1
+                    }
+                },
+                "filter": ["==", "id", ""]
+            });
+
             // var bbox = turf.bbox(data);
             //
             // map.fitBounds([[
@@ -217,17 +246,26 @@ angular.module('gogogoApp')
             //   ], [
             //       bbox[2],
             //       bbox[3]
-            //   ]],{padding:100});
+            //   ]],{padding:100})
+
             map.easeTo({pitch:50});
+
+
 
             map.on('mousemove', function (e) {
               var features = map.queryRenderedFeatures(e.point, { layers: ['grid'] });
               if (!features.length) {
                 popup.remove();
+                map.setFilter("grid-hover", ["==", "id", ""]);
                 return;
               }
 
+              map.getCanvas().style.cursor = (features.length) ? 'crosshair' : '';
+
               var feature = features[0];
+
+              map.setFilter("grid-hover", ["==", "id", feature.properties.id]);
+
               var emodict = {
                 '1':'em-tired_face',
                 '2':'em-worried',

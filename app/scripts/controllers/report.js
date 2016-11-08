@@ -17,6 +17,7 @@ angular.module('gogogoApp')
     $scope.totalTeams = 0;
     $scope.totalRoutes = 0;
     $scope.dataPoints = 0;
+    $scope.areas = 0;
 
     $scope.checkReport = function(type){
       return $scope.reportType === type;
@@ -34,6 +35,7 @@ angular.module('gogogoApp')
                 $scope.dataPoints = $scope.dataPoints + d.route.length;
               })
               $scope.gridFeatures = parseGridFilter(data, grid);
+              $scope.areas = $scope.gridFeatures.features.length;
             },function(error){
               $scope.errors = error;
             })
