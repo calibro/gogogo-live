@@ -19,7 +19,8 @@ angular
     'ui.bootstrap',
     'angular-loading-bar',
     'angular.filter',
-    'rzModule'
+    'rzModule',
+    'ngWebworker'
   ])
   .config(function ($routeProvider) {
     $routeProvider

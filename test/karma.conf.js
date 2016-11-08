@@ -33,6 +33,7 @@ module.exports = function(config) {
       'bower_components/angular-loading-bar/build/loading-bar.js',
       'bower_components/angular-filter/dist/angular-filter.js',
       'bower_components/angularjs-slider/dist/rzslider.js',
+      'bower_components/ng-webworker/src/ng-webworker.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
