@@ -8,7 +8,7 @@
  * Controller of the gogogoApp
  */
 angular.module('gogogoApp')
-  .controller('ReportCtrl', function ($scope, apiservice, parseSingleTeamFilter, Webworker) {
+  .controller('ReportCtrl', function ($scope, apiservice, parseSingleTeamFilter,$location) {
     $scope.rawRoutes;
     $scope.routes;
     $scope.gridFeatures;
@@ -21,6 +21,8 @@ angular.module('gogogoApp')
     $scope.poi = 0;
     $scope.poiDataPoints = 0;
     $scope.loading = true;
+
+    var myWorker = new Worker("worker/collect.js");
 
     $scope.checkReport = function(type){
       return $scope.reportType === type;
@@ -48,10 +50,12 @@ angular.module('gogogoApp')
     )
 
     $scope.computeGrid = function(input, grid) {
-      var requireWorker = Webworker.create(requireTurf, {async: true});
+      //var requireWorker = Webworker.create(requireTurf, {async: true});
+      myWorker.postMessage({input:input, grid:grid});
 
-      requireWorker.run(input, grid).then(function(result) {
-        var aggregated = result;
+      //requireWorker.run(input, grid).then(function(result) {
+      myWorker.onmessage = function (result) {
+        var aggregated = result.data;
         aggregated.features = aggregated.features.filter(function(feature){
           return feature.properties.emotions.length;
         })
@@ -92,21 +96,22 @@ angular.module('gogogoApp')
             }
             )
         //end
-      });
+      //});
+      }
     };
 
-    function requireTurf(input, grid) {
-      importScripts("https://npmcdn.com/@turf/turf@3.5.1/turf.min.js");
-
-      var ptFC = [];
-      input.forEach(function(route){
-        route.route.forEach(function(point){
-          ptFC.push(turf.point([+point.coordinates.longitude, +point.coordinates.latitude], {emotion: point.coordinates.emotion}));
-        })
-      })
-      ptFC = turf.featureCollection(ptFC);
-
-      return complete(turf.collect(grid, ptFC, 'emotion', 'emotions'));
-    }
+    // function requireTurf(input, grid) {
+    //   importScripts("https://npmcdn.com/@turf/turf@3.5.1/turf.min.js");
+    //
+    //   var ptFC = [];
+    //   input.forEach(function(route){
+    //     route.route.forEach(function(point){
+    //       ptFC.push(turf.point([+point.coordinates.longitude, +point.coordinates.latitude], {emotion: point.coordinates.emotion}));
+    //     })
+    //   })
+    //   ptFC = turf.featureCollection(ptFC);
+    //
+    //   return complete(turf.collect(grid, ptFC, 'emotion', 'emotions'));
+    // }
 
   });

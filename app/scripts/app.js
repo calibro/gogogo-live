@@ -19,8 +19,7 @@ angular
     'ui.bootstrap',
     'angular-loading-bar',
     'angular.filter',
-    'rzModule',
-    'ngWebworker'
+    'rzModule'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -46,6 +45,6 @@ angular
         redirectTo: '/home'
       });
   })
-  .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+  .config(['cfpLoadingBarProvider',function(cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;
   }])

@@ -398,6 +398,12 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>',
           src: ['data/*'],
           dest: '<%= yeoman.dist %>'
+        },
+        {
+          expand: true,
+          cwd: '<%= yeoman.app %>',
+          src: ['worker/*'],
+          dest: '<%= yeoman.dist %>'
         }]
       },
       styles: {
