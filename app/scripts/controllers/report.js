@@ -18,6 +18,9 @@ angular.module('gogogoApp')
     $scope.totalRoutes = 0;
     $scope.dataPoints = 0;
     $scope.areas = 0;
+    $scope.poi = 0;
+    $scope.poiDataPoints = 0;
+    $scope.loading = true;
 
     $scope.checkReport = function(type){
       return $scope.reportType === type;
@@ -63,6 +66,32 @@ angular.module('gogogoApp')
 
         $scope.gridFeatures = aggregated;
         $scope.areas = $scope.gridFeatures.features.length;
+
+        //compute POI
+        apiservice.getFile('data/poi.json')
+          .then(
+            function(poi){
+              var fc = []
+
+              $scope.poi = poi.features.length;
+              poi.features.forEach(function(d){
+                $scope.gridFeatures.features.forEach(function(e){
+                  if(turf.inside(d,e)){
+                    e.properties.name = d.properties.name;
+                    e.properties.category = d.properties.category;
+                    fc.push(e);
+                    $scope.poiDataPoints = $scope.poiDataPoints + e.properties.count;
+                  }
+                })
+              })
+              $scope.poiGrid = turf.featureCollection(fc);
+              $scope.loading = false;
+            },
+            function(error){
+              console.log(error)
+            }
+            )
+        //end
       });
     };
 

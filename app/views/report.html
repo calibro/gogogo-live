@@ -22,7 +22,7 @@
                 <span class="glyphicon glyphicon-menu-right"></span>
               </div>
            </div>
-           <div class="media" ng-class="{'mediaActive': checkReport('average')}" ng-click="reportType = 'average'">
+           <div class="media" ng-class="{'mediaActive': checkReport('average'), 'mediaDisabled': loading}" ng-click="reportType = 'average'">
               <div class="media-body">
               <p>
                 <span class="routeInfo">Average emotion per areas</span>
@@ -32,20 +32,20 @@
               </p>
               </div>
               <div class="media-right">
-                <span class="glyphicon glyphicon-menu-right"></span>
+                <span class="glyphicon" ng-class="{true: 'glyphicon-refresh spinning', false: 'glyphicon-menu-right'}[loading]"></span>
               </div>
            </div>
-           <div class="media" ng-class="{'mediaActive': checkReport('poi')}" ng-click="reportType = 'poi'">
+           <div class="media" ng-class="{'mediaActive': checkReport('poi'), 'mediaDisabled': loading}" ng-click="reportType = 'poi'">
               <div class="media-body">
               <p>
                 <span class="routeInfo">Point of interests</span>
               </p>
               <p>
-                15 POI - 2000 data points
+                {{poi}} POI - {{poiDataPoints | number:0}} data points
               </p>
               </div>
               <div class="media-right">
-                <span class="glyphicon glyphicon-menu-right"></span>
+                <span class="glyphicon" ng-class="{true: 'glyphicon-refresh spinning', false: 'glyphicon-menu-right'}[loading]"></span>
               </div>
            </div>
       </div>

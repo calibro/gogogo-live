@@ -41,11 +41,11 @@ angular.module('gogogoApp')
             $sticky.css('top', angular.element('.routesContainer').position().top+'px');
 
             // var reltop = angular.element('.routesContainer').scrollTop()
-            // if (next && npos <= angular.element('.routesContainer').scrollTop() + next.clientHeight){
-            //    $sticky.addClass("absolute");
-            //    $sticky.removeClass("fixed2");
+             if (next && npos <= angular.element('.routesContainer').scrollTop()){
+                $sticky.addClass("absolute");
+                $sticky.removeClass("fixed2");
             //    $sticky.css("top",reltop + (reltop + ($(next).position().top-reltop)) - next.clientHeight + 'px');
-            //  }
+              }
 
           } else {
             var $prev = stickies[index - 1],
