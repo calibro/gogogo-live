@@ -148,8 +148,28 @@ body,html{
   padding: 10px 0px;
 }
 
+.backhome{
+  margin-left: 15px;
+  text-transform: capitalize;
+  padding-top: 4px;
+}
+
+.backhome .glyphicon{
+  margin-right: 2px;
+}
+
+.backhome a{
+  color: white;
+  text-decoration: none;
+}
+
+.backhome a:hover{
+  color: white;
+}
+
 .mainTitle img{
-  width: 40%;
+  height: 25px;
+  margin-left: -55px;
 }
 
 .search{
