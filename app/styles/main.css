@@ -79,10 +79,11 @@ body,html{
 }
 
 .credits{
-  margin-bottom: 25px;
+  margin-top: 50px;
 }
 .author{
   margin-right: 25px;
+  min-height: 70px;
 }
 
 .author p{
@@ -94,10 +95,27 @@ body,html{
   margin: 0px;
 }
 
+.prdesc{
+  font-size: 16px;
+  line-height: 25px;
+}
+
 .logo{
   margin-top: -1%;
   width: 102%;
   margin-left: -1%;
+}
+
+.datapoints h2{
+  font-size: 72px;
+  font-weight: bold;
+  margin: 0px;
+}
+
+.datapoints p{
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-bottom: 25px;
 }
 
 .flex{
