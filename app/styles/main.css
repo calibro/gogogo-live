@@ -324,6 +324,12 @@ svg .tick line{
   letter-spacing: 1px;
 }
 
+.routeInfoReport{
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
 .teamNumber{
   padding: 15px;
   font-size: 14px;
@@ -474,6 +480,34 @@ ddn-sticky-wrapper>ddn-sticky.fixed2 {
 .reportsContainer .media-right{
   vertical-align: middle;
 }
+
+.reportFlexCont{
+  min-height: 100vh!important;
+  overflow-y: scroll;
+}
+
+.legendContainer{
+  margin-top: auto;
+}
+
+.legendContainer h3{
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 0px;
+  padding-top: 10px;
+  border-top: 1px solid #979797;
+}
+
+.legendContainer p{
+  margin-top: 0px;
+  padding-top: 10px;
+}
+
+.legendContainer p:nth-child(1){
+  border-top: 1px solid #979797;
+}
+
 
 .popupTitle{
   font-size: 16px;

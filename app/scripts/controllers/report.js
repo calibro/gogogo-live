@@ -27,6 +27,7 @@ angular.module('gogogoApp')
     $scope.checkReport = function(type){
       return $scope.reportType === type;
     }
+  
     apiservice.getFile('data/ams_grid.json')
       .then(function(grid){
         $scope.grid = grid;

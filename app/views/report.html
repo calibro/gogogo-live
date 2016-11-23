@@ -1,6 +1,6 @@
 <div class="container-fluid fullHeight">
   <div class="row fullHeight">
-      <div class="col-md-4 flex">
+      <div class="col-md-4 flex reportFlexCont">
       <div class="filtersContainer">
         <div class="mainTitle">
           <span class="pull-left backhome">
@@ -17,11 +17,11 @@
        <div class="reportsContainer">
            <div class="media" ng-class="{'mediaActive': checkReport('all')}" ng-click="reportType = 'all'">
               <div class="media-body">
+                <p>
+                  {{totalRoutes}} routes - {{totalTeams}} teams
+                </p>
               <p>
-                <span class="routeInfo">All routes with emotions</span>
-              </p>
-              <p>
-                {{totalRoutes}} routes - {{totalTeams}} teams
+                <span class="routeInfoReport">All routes with emotions</span>
               </p>
               </div>
               <div class="media-right">
@@ -30,11 +30,11 @@
            </div>
            <div class="media" ng-class="{'mediaActive': checkReport('average'), 'mediaDisabled': loading}" ng-click="reportType = 'average'">
               <div class="media-body">
+                <p>
+                  {{areas}} areas - {{dataPoints | number:0}} data points
+                </p>
               <p>
-                <span class="routeInfo">Average emotion per areas</span>
-              </p>
-              <p>
-                {{areas}} areas - {{dataPoints | number:0}} data points
+                <span class="routeInfoReport">Average emotion per area</span>
               </p>
               </div>
               <div class="media-right">
@@ -43,17 +43,62 @@
            </div>
            <div class="media" ng-class="{'mediaActive': checkReport('poi'), 'mediaDisabled': loading}" ng-click="reportType = 'poi'">
               <div class="media-body">
+                <p>
+                  {{poi}} points of interest - {{poiDataPoints | number:0}} data points
+                </p>
               <p>
-                <span class="routeInfo">Point of interests</span>
-              </p>
-              <p>
-                {{poi}} POI - {{poiDataPoints | number:0}} data points
+                <span class="routeInfoReport">Points of interest</span>
               </p>
               </div>
               <div class="media-right">
                 <span class="glyphicon" ng-class="{true: 'glyphicon-refresh spinning', false: 'glyphicon-menu-right'}[loading]"></span>
               </div>
            </div>
+      </div>
+      <div class="legendContainer">
+        <div class="row">
+          <div class="col-md-4">
+            <h3>
+              how to read the map
+            </h3>
+          </div>
+          <div class="col-md-8" ng-if="reportType == 'all'">
+            <p>
+              <b>COLOR</b>: How do students perceive the area they are passing through?
+            </p>
+            <p>
+              <img style="width:100%" src="images/color-legend.svg" />
+            </p>
+          </div>
+          <div class="col-md-8" ng-if="reportType == 'average'">
+            <p>
+              <b>COLOR</b>: Most prominent mood per area registered by data sprint students.
+            </p>
+            <p>
+              <img style="width:100%" src="images/color-legend.svg" />
+            </p>
+            <p>
+              <b>AREA</b>
+            </p>
+            <p>
+              <img src="images/block-legend.svg" />
+            </p>
+          </div>
+          <div class="col-md-8" ng-if="reportType == 'poi'">
+            <p>
+              <b>COLOR</b>: most prominent mood per point of interest registered by data sprint students
+            </p>
+            <p>
+              <img style="width:100%" src="images/color-legend.svg" />
+            </p>
+            <p>
+              <b>STROKE</b>: point of interest category
+            </p>
+            <p>
+              <img src="images/cat-legend.svg" />
+            </p>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-md-8 fullHeight">
