@@ -520,6 +520,38 @@ ddn-sticky-wrapper>ddn-sticky.fixed2 {
   font-family: 'chivo', sans-serif;
 }
 
+.splashMobile{
+  position: absolute;
+  top:0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(255, 255, 255, 0.90);
+  z-index: 9999;
+  text-align: center;
+  display: flex!important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: -webkit-flex!important;
+  -webkit-flex-direction: column;
+  -webkit-justify-content: center;
+  -webkit-align-items: center;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.splashMobile a{
+  color: black;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.splashMobile a:hover{
+  color: black;
+  text-decoration: underline;
+}
+
 @media (min-width:768px){
   body,html{
     overflow: hidden;
