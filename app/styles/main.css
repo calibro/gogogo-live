@@ -154,7 +154,7 @@ body,html{
   padding-top: 4px;
 }
 
-.backhome .glyphicon{
+.backhome [class^="icon-"]{
   margin-right: 2px;
 }
 
@@ -488,6 +488,7 @@ ddn-sticky-wrapper>ddn-sticky.fixed2 {
 
 .legendContainer{
   margin-top: auto;
+  margin-bottom: 15px;
 }
 
 .legendContainer h3{
@@ -550,6 +551,11 @@ ddn-sticky-wrapper>ddn-sticky.fixed2 {
 .splashMobile a:hover{
   color: black;
   text-decoration: underline;
+}
+
+.legendHelper{
+  width: 100%;
+  max-width: 240px;
 }
 
 @media (min-width:768px){
